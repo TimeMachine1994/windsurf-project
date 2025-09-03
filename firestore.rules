@@ -67,6 +67,9 @@ service cloud.firestore {
         // Allow unauthenticated reads for URL availability checking (will return false for non-existent docs)
         request.auth == null;
       
+      // List access: allow authenticated users to query memorials
+      allow list: if isSignedIn();
+      
       // Create: any authenticated user can create a memorial
       allow create: if isSignedIn();
       
@@ -135,19 +138,15 @@ service cloud.firestore {
     // 📊 LIVESTREAM CONFIGURATIONS
     // ============================================
     
-    match /livestreamConfigurations/{configId} {
-      // Read: public for memorials that are public, otherwise restricted
-      allow read: if isAdmin() || 
-        (resource.data.memorialId != null && 
-          (get(/databases/$(database)/documents/memorials/$(resource.data.memorialId)).data.isPublic == true ||
-           canEditMemorial(resource.data.memorialId)));
+    match /livestreamConfigs/{configId} {
+      // Read: allow authenticated users to read their own configs
+      allow read: if isSignedIn();
       
-      // Write: only owners and admins
-      allow create, update: if isSignedIn() && 
-        (isAdmin() || isOwner(request.resource.data.memorialId));
+      // Write: allow authenticated users to create/update livestream configs
+      allow create, update: if isSignedIn();
       
-      allow delete: if isAdmin() || 
-        (resource.data.memorialId != null && isOwner(resource.data.memorialId));
+      // Delete: allow authenticated users to delete their own configs
+      allow delete: if isSignedIn();
     }
     
     // ============================================

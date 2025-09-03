@@ -35,7 +35,7 @@ export async function isUrlAvailable(customUrl: string): Promise<boolean> {
     const isAvailable = !docSnap.exists();
     console.log('✅ URL availability result:', { customUrl, isAvailable, exists: docSnap.exists() });
     return isAvailable;
-  } catch (error) {
+  } catch (error: any) {
     console.error('❌ Error checking URL availability:', error);
     console.error('Error details:', { customUrl, errorMessage: error.message, errorCode: error.code });
     
@@ -85,6 +85,16 @@ export async function createMemorialAndUser(data: MemorialCreationData): Promise
     const user = userCredential.user;
     console.log('✅ User account created successfully with UID:', user.uid);
     
+    // Wait for auth state to be properly set
+    console.log('⏳ Waiting for authentication state to be established...');
+    await new Promise(resolve => setTimeout(resolve, 100));
+    
+    // Verify user is authenticated
+    if (!auth.currentUser) {
+      throw new Error('User authentication failed - currentUser is null');
+    }
+    console.log('✅ User authentication confirmed, currentUser UID:', auth.currentUser.uid);
+    
     // Create user profile in Firestore with Owner role
     console.log('📝 Creating user profile in Firestore...');
     const userProfile: UserProfile = {
@@ -116,8 +126,20 @@ export async function createMemorialAndUser(data: MemorialCreationData): Promise
     };
     console.log('📄 Memorial data:', memorial);
     
-    await setDoc(doc(db, 'memorials', customUrl), memorial);
-    console.log('✅ Memorial document saved to Firestore with ID:', customUrl);
+    try {
+      await setDoc(doc(db, 'memorials', customUrl), memorial);
+      console.log('✅ Memorial document saved to Firestore with ID:', customUrl);
+    } catch (memorialError: any) {
+      console.error('❌ Failed to create memorial document:', memorialError);
+      console.error('Memorial creation error details:', {
+        customUrl,
+        userUid: user.uid,
+        isAuthenticated: !!auth.currentUser,
+        errorCode: memorialError.code,
+        errorMessage: memorialError.message
+      });
+      throw new Error(`Failed to create memorial: ${memorialError.message}`);
+    }
     
     console.log('🎉 Memorial creation process completed successfully!');
     return {

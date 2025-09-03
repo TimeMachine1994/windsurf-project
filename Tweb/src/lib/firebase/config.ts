@@ -5,12 +5,13 @@ import { dev } from '$app/environment';
 
 // Firebase configuration - replace with your actual config
 const firebaseConfig = {
-  apiKey: "your-api-key",
-  authDomain: "your-project.firebaseapp.com",
-  projectId: "your-project-id",
-  storageBucket: "your-project.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "your-app-id"
+  apiKey: "AIzaSyAXmTxzYRc-LhMEW75nZjjjQCZov1gpiw0",
+  authDomain: "fir-tweb.firebaseapp.com",
+  projectId: "fir-tweb",
+  storageBucket: "fir-tweb.firebasestorage.app",
+  messagingSenderId: "509455146790",
+  appId: "1:509455146790:web:7ec99527214b05d7b9ebe7",
+  measurementId: "G-NLY7K5GGYQ"
 };
 
 // Initialize Firebase

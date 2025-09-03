@@ -14,16 +14,21 @@
 	import { onMount } from 'svelte';
 	import { auth } from '$lib/firebase/config';
 	import { goto } from '$app/navigation';
+	import { saveCalculatorState, getCalculatorState, clearCalculatorState, getDefaultFormData } from '$lib/utils/calculatorState';
+	import { saveLivestreamConfig, getLivestreamConfig } from '$lib/firebase/livestream';
 
 	let {
 		memorialId,
 		data
 	}: {
-		memorialId: string | null;
+		memorialId: string;
 		data: { memorial: Memorial | null; config: LivestreamConfig | null };
 	} = $props();
 
 	console.log('🧮 Calculator Component Initializing...', { memorialId, data });
+	console.log('🔍 Memorial ID received:', memorialId);
+	console.log('🔍 Memorial data:', data.memorial);
+	console.log('🔍 Config data:', data.config);
 
 	type Step = 'tier' | 'details' | 'addons' | 'payment';
 
@@ -35,37 +40,35 @@
 	let configId = $state<string | null>(null);
 	let selectedTier = $state<Tier>(null);
 
-	let formData = $state<CalculatorFormData>({
-		lovedOneName: '',
-		mainService: {
-			location: { name: '', address: '', isUnknown: false },
-			time: { date: null, time: null, isUnknown: false },
-			hours: 2
-		},
-		additionalLocation: {
-			enabled: false,
-			location: { name: '', address: '', isUnknown: false },
-			startTime: null,
-			hours: 2
-		},
-		additionalDay: {
-			enabled: false,
-			location: { name: '', address: '', isUnknown: false },
-			startTime: null,
-			hours: 2
-		},
-		funeralDirectorName: '',
-		funeralHome: '',
-		addons: {
-			photography: false,
-			audioVisualSupport: false,
-			liveMusician: false,
-			woodenUsbDrives: 0
-		}
-	});
+	let formData = $state<CalculatorFormData>(getDefaultFormData());
 
-	onMount(() => {
-		if (data.config) {
+	onMount(async () => {
+		// First priority: Try to load from Firestore if we have a memorial ID
+		if (memorialId) {
+			try {
+				const firestoreConfig = await getLivestreamConfig(memorialId);
+				if (firestoreConfig) {
+					console.log('🔄 Restoring calculator state from Firestore:', firestoreConfig);
+					currentStep = firestoreConfig.currentStep || 'tier';
+					formData = firestoreConfig.formData;
+					selectedTier = firestoreConfig.bookingItems.find(
+						(item) => item.package.includes('Tributestream')
+					)?.id as Tier || null;
+					return;
+				}
+			} catch (error) {
+				console.error('❌ Error loading Firestore config:', error);
+			}
+		}
+
+		// Fallback: Try to restore from localStorage
+		const savedState = getCalculatorState();
+		if (savedState && savedState.memorialId === memorialId) {
+			console.log('🔄 Restoring calculator state from localStorage:', savedState);
+			currentStep = savedState.currentStep;
+			selectedTier = savedState.selectedTier;
+			formData = savedState.formData;
+		} else if (data.config) {
 			console.log('📝 Pre-filling form with existing config data:', data.config);
 			formData = data.config.formData;
 			const basePackage = data.config.bookingItems.find(
@@ -84,6 +87,20 @@
 	});
 
 	$inspect(formData, selectedTier, currentStep, clientSecret, configId);
+
+	// Auto-save state whenever form data changes
+	$effect(() => {
+		if (memorialId && (selectedTier || formData.lovedOneName || formData.mainService.location.name)) {
+			// Save to both Firestore and localStorage for redundancy
+			saveLivestreamConfig(memorialId, formData, bookingItems, total, currentStep);
+			saveCalculatorState({
+				currentStep,
+				selectedTier,
+				formData,
+				memorialId
+			});
+		}
+	});
 
 	const TIER_PRICES: Record<string, number> = {
 		solo: 599,
@@ -256,7 +273,7 @@
 
 	$inspect(bookingItems, total);
 
-	function handleTierChange(tier: Tier) {
+	async function handleTierChange(tier: Tier) {
 		console.log('✨ Tier selected:', tier);
 		selectedTier = tier;
 		// Reset relevant parts of the form when tier changes
@@ -266,23 +283,32 @@
 			liveMusician: false,
 			woodenUsbDrives: 0
 		};
+		// Auto-save state to both Firestore and localStorage
+		if (memorialId) {
+			await saveLivestreamConfig(memorialId, formData, bookingItems, total, currentStep);
+		}
+		saveCalculatorState({
+			currentStep,
+			selectedTier: tier,
+			formData,
+			memorialId
+		});
 	}
 
 	async function saveAndPayLater(isPayNowFlow = false) {
 		console.log('🚀 saveAndPayLater function called');
-		console.log('📊 Current state check:');
-		console.log('  - selectedTier:', selectedTier);
-		console.log('  - formData:', formData);
-		console.log('  - bookingItems:', bookingItems);
-		console.log('  - total:', total);
-		console.log('  - auth.currentUser:', auth.currentUser);
 		
 		try {
-			console.log('💾 Starting save and pay later process...');
-			
 			// Validate required data
 			if (!selectedTier) {
 				console.error('❌ No tier selected!');
+				alert('Please select a package tier first.');
+				return;
+			}
+			
+			if (!memorialId) {
+				console.error('❌ No memorial ID!');
+				alert('Memorial ID is required to save configuration.');
 				return;
 			}
 			
@@ -298,78 +324,32 @@
 			
 			console.log('✅ Data validation passed');
 			
-			// Prepare form data
-			console.log('📦 Preparing FormData...');
-			const formDataToSend = new FormData();
+			// Save to Firestore
+			console.log('💾 Saving to Firestore...');
+			const firestoreResult = await saveLivestreamConfig(memorialId, formData, bookingItems, total, currentStep);
 			
-			const formDataJson = JSON.stringify(formData);
-			const bookingItemsJson = JSON.stringify(bookingItems);
-			const totalString = total.toString();
-			
-			console.log('📝 Data to send:');
-			console.log('  - formData JSON length:', formDataJson.length);
-			console.log('  - bookingItems JSON length:', bookingItemsJson.length);
-			console.log('  - total string:', totalString);
-			
-			formDataToSend.append('formData', formDataJson);
-			formDataToSend.append('bookingItems', bookingItemsJson);
-			formDataToSend.append('total', totalString);
-			formDataToSend.append('currentStep', currentStep);
-			if (memorialId) {
-				formDataToSend.append('memorialId', memorialId);
-			}
-			
-			console.log('✅ FormData prepared successfully');
-			
-			// Make the request
-			console.log('🌐 Making fetch request to /api/booking/save');
-			const response = await fetch('/api/booking/save', {
-				method: 'POST',
-				body: formDataToSend
-			});
-			
-			console.log('📡 Response received:');
-			console.log('  - status:', response.status);
-			console.log('  - statusText:', response.statusText);
-			console.log('  - ok:', response.ok);
-			console.log('  - headers:', Object.fromEntries(response.headers.entries()));
-			
-			if (!response.ok) {
-				console.error('❌ Response not OK:', response.status, response.statusText);
-				const errorText = await response.text();
-				console.error('❌ Error response body:', errorText);
-				return;
-			}
-			
-			console.log('🔄 Parsing JSON response...');
-			const result = await response.json();
-			console.log('✅ Save response parsed:', result);
-
-			if (result.type === 'redirect' && !isPayNowFlow) {
-				console.log(`🔀 Server initiated redirect to: ${result.location}`);
-				await goto(result.location);
-				return;
-			}
-
-			if (result.type === 'failure') {
-				console.error('❌ Save failed:', result.data);
-				alert(`Save failed: ${result.data?.details || result.data?.error || 'Unknown error'}`);
-				return;
-			}
-
-			if (result.type === 'success' && result.data?.success) {
-				console.log('🎉 Configuration saved successfully!', result.data);
+			if (firestoreResult.success) {
+				console.log('🎉 Configuration saved to Firestore successfully!');
+				
+				// Also save to localStorage as backup
+				saveCalculatorState({
+					currentStep,
+					selectedTier,
+					formData,
+					memorialId
+				});
+				
 				if (!isPayNowFlow) {
-					alert('Configuration saved successfully!');
+					alert('Configuration saved successfully! Your progress is automatically saved and you can return anytime to continue where you left off.');
 				}
 			} else {
-				console.error('❌ An unexpected error occurred:', result);
-				alert('An unexpected error occurred. Please try again.');
+				console.error('❌ Failed to save to Firestore:', firestoreResult.error);
+				alert(`Save failed: ${firestoreResult.error || 'Unknown error'}`);
 			}
 			
 		} catch (error) {
 			console.error('💥 Error in saveAndPayLater function:', error);
-			console.error('📍 Error stack:', error instanceof Error ? error.stack : 'No stack trace available');
+			alert('An unexpected error occurred. Please try again.');
 		}
 	}
 
@@ -406,17 +386,37 @@
 		}
 	}
 
-	function nextStep() {
+	async function nextStep() {
 		const currentIndex = steps.indexOf(currentStep);
 		if (currentIndex < steps.length - 1) {
 			currentStep = steps[currentIndex + 1];
+			// Auto-save state when navigating
+			if (memorialId) {
+				await saveLivestreamConfig(memorialId, formData, bookingItems, total, currentStep);
+			}
+			saveCalculatorState({
+				currentStep,
+				selectedTier,
+				formData,
+				memorialId
+			});
 		}
 	}
 
-	function prevStep() {
+	async function prevStep() {
 		const currentIndex = steps.indexOf(currentStep);
 		if (currentIndex > 0) {
 			currentStep = steps[currentIndex - 1];
+			// Auto-save state when navigating
+			if (memorialId) {
+				await saveLivestreamConfig(memorialId, formData, bookingItems, total, currentStep);
+			}
+			saveCalculatorState({
+				currentStep,
+				selectedTier,
+				formData,
+				memorialId
+			});
 		}
 	}
 

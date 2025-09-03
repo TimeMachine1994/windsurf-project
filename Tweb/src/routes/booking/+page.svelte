@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { authStore } from '$lib/stores/auth';
 	import { getMemorialByCreatorUid } from '$lib/firebase/memorial';
+	import { getLivestreamConfig } from '$lib/firebase/livestream';
 	import Calculator from './Calculator.svelte';
 	import type { Memorial } from '$lib/types/memorial';
 	import type { LivestreamConfig } from '$lib/types/livestream';
@@ -20,11 +21,22 @@
 				memorial = await getMemorialByCreatorUid($authStore.user.uid);
 				console.log('✅ Memorial loaded for booking:', memorial);
 				
-				// TODO: Load existing livestream config if available
-				// config = await getLivestreamConfig(memorial?.id);
+				// If no memorial found, show helpful message
+				if (!memorial) {
+					error = 'No memorial found for your account. Please create a memorial first before booking livestream services.';
+					loading = false;
+					return;
+				}
+				
+				// Load existing livestream config if available
+				if (memorial?.id) {
+					console.log('🔍 Loading livestream config for memorial:', memorial.id);
+					config = await getLivestreamConfig(memorial.id);
+					console.log('✅ Livestream config loaded:', config);
+				}
 			} catch (err: any) {
 				console.error('❌ Error loading memorial for booking:', err);
-				error = 'Failed to load memorial data';
+				error = 'Failed to load memorial data. Please try refreshing the page.';
 			}
 		} else if (!$authStore.user) {
 			error = 'Please sign in to book livestream services.';
@@ -74,10 +86,17 @@
 		
 		<div class="calculator-wrapper">
 			<div class="container">
-				<Calculator 
-					memorialId={memorial?.id || null} 
-					data={{ memorial, config }} 
-				/>
+				{#if memorial}
+					<Calculator 
+						memorialId={memorial.id} 
+						data={{ memorial, config }} 
+					/>
+				{:else}
+					<div class="loading-container">
+						<div class="spinner"></div>
+						<p>Loading memorial data...</p>
+					</div>
+				{/if}
 			</div>
 		</div>
 	{/if}
