@@ -1,6 +1,73 @@
-@import 'tailwindcss';
-@plugin '@tailwindcss/forms';
-@plugin '@tailwindcss/typography';
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Theme System - Brand Colors */
+:root {
+	/* Light Mode - Gold & Sky Grey */
+	--color-primary: #D5BA7F;
+	--color-primary-dark: #C5A86F;
+	--color-primary-light: #E5CA8F;
+	--color-primary-alpha: rgba(213, 186, 127, 0.2);
+	
+	--color-secondary: #CFCFCE;
+	--color-secondary-dark: #BFBFBE;
+	--color-secondary-light: #DFDFDE;
+	
+	--color-background: #FFFFFF;
+	--color-surface: #F8FAFC;
+	--color-surface-hover: #F1F5F9;
+	
+	--color-text: #000000;
+	--color-text-secondary: #333333;
+	--color-text-muted: #666666;
+	
+	--color-border: #E5E7EB;
+	--color-border-light: #F3F4F6;
+	
+	--color-success: #10B981;
+	--color-error: #EF4444;
+	--color-warning: #F59E0B;
+	
+	/* Shadows */
+	--shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+	--shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+	--shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+	--shadow-primary: 0 4px 12px var(--color-primary-alpha);
+}
+
+[data-theme="dark"] {
+	/* Dark Mode - Gold & Dark Grey/Black */
+	--color-primary: #D5BA7F;
+	--color-primary-dark: #C5A86F;
+	--color-primary-light: #E5CA8F;
+	--color-primary-alpha: rgba(213, 186, 127, 0.3);
+	
+	--color-secondary: #4A5568;
+	--color-secondary-dark: #2D3748;
+	--color-secondary-light: #718096;
+	
+	--color-background: #111827;
+	--color-surface: #1F2937;
+	--color-surface-hover: #374151;
+	
+	--color-text: #F9FAFB;
+	--color-text-secondary: #D1D5DB;
+	--color-text-muted: #9CA3AF;
+	
+	--color-border: #374151;
+	--color-border-light: #4B5563;
+	
+	--color-success: #34D399;
+	--color-error: #F87171;
+	--color-warning: #FBBF24;
+	
+	/* Shadows for dark mode */
+	--shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+	--shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+	--shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+	--shadow-primary: 0 4px 12px var(--color-primary-alpha);
+}
 
 /* Global styles for better layout */
 * {
@@ -12,4 +79,101 @@ html, body {
 	padding: 0;
 	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
 	line-height: 1.6;
+	background-color: var(--color-background);
+	color: var(--color-text);
+	transition: background-color 0.3s ease, color 0.3s ease;
 }
+
+/* Global utility classes */
+.bg-primary { background-color: var(--color-primary); }
+.bg-secondary { background-color: var(--color-secondary); }
+.bg-surface { background-color: var(--color-surface); }
+.text-primary { color: var(--color-primary); }
+.text-secondary { color: var(--color-text-secondary); }
+.border-primary { border-color: var(--color-primary); }
+.shadow-primary { box-shadow: var(--shadow-primary); }
+
+/* Form input styles */
+.form-input {
+	width: 100%;
+	padding: 0.75rem;
+	border: 1px solid var(--color-border);
+	border-radius: 0.5rem;
+	background: var(--color-background);
+	color: var(--color-text);
+	transition: all 0.2s ease;
+}
+
+.form-input:focus {
+	outline: none;
+	border-color: var(--color-primary);
+	box-shadow: 0 0 0 3px var(--color-primary-alpha);
+}
+
+/* Global button styles */
+.btn {
+	padding: 0.75rem 1.5rem;
+	border: none;
+	border-radius: 0.5rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	text-decoration: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+}
+
+.btn-primary {
+	background: var(--color-primary);
+	color: white;
+	border: 2px solid var(--color-primary);
+}
+
+.btn-primary:hover {
+	background: var(--color-primary-dark);
+	border-color: var(--color-primary-dark);
+	transform: translateY(-1px);
+	box-shadow: var(--shadow-primary);
+}
+
+.btn-secondary {
+	background: transparent;
+	color: var(--color-primary);
+	border: 2px solid var(--color-primary);
+}
+
+.btn-secondary:hover {
+	background: var(--color-primary);
+	color: white;
+	transform: translateY(-1px);
+	box-shadow: var(--shadow-primary);
+}
+
+.btn-outline {
+	background: transparent;
+	color: var(--color-text);
+	border: 2px solid var(--color-border);
+}
+
+.btn-outline:hover {
+	background: var(--color-surface-hover);
+	border-color: var(--color-primary);
+	color: var(--color-primary);
+}
+
+/* Global heading styles */
+h1, h2, h3, h4, h5, h6 {
+	color: var(--color-text);
+	font-weight: 600;
+	line-height: 1.2;
+	margin-bottom: 1rem;
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.75rem; }
+h4 { font-size: 1.5rem; }
+h5 { font-size: 1.25rem; }
+h6 { font-size: 1.125rem; }

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { authStore } from '$lib/stores/auth';
 	import { signOutUser } from '$lib/firebase/auth';
+	import ThemeToggle from './ThemeToggle.svelte';
 	
 	let showUserMenu = false;
 	
@@ -37,6 +38,8 @@
 		</nav>
 		
 		<div class="header-actions">
+			<ThemeToggle />
+			
 			{#if $authStore.loading}
 				<div class="loading">Loading...</div>
 			{:else if $authStore.user}
@@ -69,13 +72,14 @@
 
 <style>
 	.header {
-		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
 		color: white;
 		padding: 1rem 0;
-		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+		box-shadow: var(--shadow-lg);
 		position: sticky;
 		top: 0;
 		z-index: 100;
+		transition: all 0.3s ease;
 	}
 	
 	.container {
@@ -174,6 +178,12 @@
 		gap: 0.5rem;
 	}
 	
+	.header-actions {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+	}
+	
 	.loading {
 		color: rgba(255, 255, 255, 0.8);
 		font-size: 0.875rem;
@@ -218,9 +228,10 @@
 		position: absolute;
 		top: 100%;
 		right: 0;
-		background: white;
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
 		border-radius: 0.375rem;
-		box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+		box-shadow: var(--shadow-lg);
 		min-width: 150px;
 		z-index: 1000;
 		margin-top: 0.5rem;
@@ -230,7 +241,7 @@
 		display: block;
 		width: 100%;
 		padding: 0.75rem 1rem;
-		color: #374151;
+		color: var(--color-text);
 		text-decoration: none;
 		border: none;
 		background: none;
@@ -241,7 +252,7 @@
 	}
 	
 	.dropdown-item:hover {
-		background: #f3f4f6;
+		background: var(--color-surface-hover);
 	}
 	
 	.dropdown-item:first-child {

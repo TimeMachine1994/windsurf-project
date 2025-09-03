@@ -4,13 +4,15 @@
 	import Header from '$lib/components/Header.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import { authStore } from '$lib/stores/auth';
+	import { theme } from '$lib/stores/theme';
 	import { onMount } from 'svelte';
 	
 	let { children } = $props();
 	
-	// Initialize auth store when the app loads
+	// Initialize auth store and theme when the app loads
 	onMount(() => {
 		const unsubscribe = authStore.init();
+		theme.init();
 		
 		// Cleanup on component destroy
 		return () => {

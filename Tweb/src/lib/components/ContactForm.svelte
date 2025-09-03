@@ -75,9 +75,9 @@
 </script>
 
 <div class="max-w-2xl mx-auto p-6">
-	<div class="bg-white rounded-lg shadow-lg p-8">
-		<h2 class="text-3xl font-bold text-gray-900 mb-2">Get in Touch</h2>
-		<p class="text-gray-600 mb-8">
+	<div class="bg-surface rounded-lg shadow-lg p-8">
+		<h2 class="text-3xl font-bold mb-2">Get in Touch</h2>
+		<p class="text-secondary mb-8">
 			Have questions about our memorial services? We're here to help you create a lasting tribute.
 		</p>
 
@@ -108,7 +108,7 @@
 			<!-- Name and Email Row -->
 			<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 				<div>
-					<label for="name" class="block text-sm font-medium text-gray-700 mb-2">
+					<label for="name" class="block text-sm font-medium mb-2">
 						Full Name *
 					</label>
 					<input
@@ -116,14 +116,14 @@
 						id="name"
 						bind:value={name}
 						required
-						class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+						class="form-input"
 						placeholder="Your full name"
 						disabled={isSubmitting}
 					/>
 				</div>
 
 				<div>
-					<label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+					<label for="email" class="block text-sm font-medium mb-2">
 						Email Address *
 					</label>
 					<input
@@ -131,7 +131,7 @@
 						id="email"
 						bind:value={email}
 						required
-						class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+						class="form-input"
 						placeholder="your@email.com"
 						disabled={isSubmitting}
 					/>
@@ -140,7 +140,7 @@
 
 			<!-- Subject -->
 			<div>
-				<label for="subject" class="block text-sm font-medium text-gray-700 mb-2">
+				<label for="subject" class="block text-sm font-medium mb-2">
 					Subject *
 				</label>
 				<input
@@ -148,7 +148,7 @@
 					id="subject"
 					bind:value={subject}
 					required
-					class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+					class="form-input"
 					placeholder="How can we help you?"
 					disabled={isSubmitting}
 				/>
@@ -156,7 +156,7 @@
 
 			<!-- Message -->
 			<div>
-				<label for="message" class="block text-sm font-medium text-gray-700 mb-2">
+				<label for="message" class="block text-sm font-medium mb-2">
 					Message *
 				</label>
 				<textarea
@@ -164,7 +164,7 @@
 					bind:value={message}
 					required
 					rows="6"
-					class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-y"
+					class="form-input resize-y"
 					placeholder="Tell us about your needs, questions, or how we can assist you..."
 					disabled={isSubmitting}
 				></textarea>
@@ -175,7 +175,7 @@
 				<button
 					type="submit"
 					disabled={isSubmitting}
-					class="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center"
+					class="btn btn-primary w-full"
 				>
 					{#if isSubmitting}
 						<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -191,17 +191,17 @@
 		</form>
 
 		<!-- Contact Info -->
-		<div class="mt-8 pt-8 border-t border-gray-200">
-			<h3 class="text-lg font-semibold text-gray-900 mb-4">Other Ways to Reach Us</h3>
-			<div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600">
+		<div class="mt-8 pt-8 border-t">
+			<h3 class="text-lg font-semibold mb-4">Other Ways to Reach Us</h3>
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-secondary">
 				<div class="flex items-center">
-					<svg class="w-5 h-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<svg class="w-5 h-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
 					</svg>
 					tributestream@tributestream.com
 				</div>
 				<div class="flex items-center">
-					<svg class="w-5 h-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<svg class="w-5 h-5 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
 					</svg>
 					Response within 24 hours
