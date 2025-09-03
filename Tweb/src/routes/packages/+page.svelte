@@ -30,7 +30,7 @@
 				<div class="package-header">
 					<div class="package-icon">🎥</div>
 					<h3 class="package-name">Tributestream RECORD</h3>
-					<div class="package-price">$699</div>
+					<div class="package-price">Please login for pricing</div>
 				</div>
 				<div class="package-content">
 					<p class="package-description">
@@ -48,7 +48,7 @@
 					</div>
 				</div>
 				<div class="package-footer">
-					<a href="/contact" class="btn btn-outline">Choose Record</a>
+					<a href="/login" class="btn btn-outline">Login to View Pricing</a>
 				</div>
 			</div>
 
@@ -58,7 +58,7 @@
 				<div class="package-header">
 					<div class="package-icon">💻</div>
 					<h3 class="package-name">Tributestream LIVE</h3>
-					<div class="package-price">$1,299</div>
+					<div class="package-price">Please login for pricing</div>
 				</div>
 				<div class="package-content">
 					<p class="package-description">
@@ -69,17 +69,12 @@
 						<li>Professional livestream technician on-site</li>
 						<li>Remote producer to oversee stream quality</li>
 						<li>Live streaming for remote attendees</li>
-						<li>Custom shareable link (averages 60-80 viewers)</li>
-						<li>Professional video and audio quality</li>
-						<li>One year of hosting included</li>
+						<li>Custom link with one year of hosting</li>
 						<li>Complimentary download of the original video</li>
 					</ul>
-					<div class="package-note">
-						<strong>Note:</strong> This package does not include video editing or the Tributebox USB drive.
-					</div>
 				</div>
 				<div class="package-footer">
-					<a href="/contact" class="btn btn-primary">Choose Live</a>
+					<a href="/login" class="btn btn-primary">Login to View Pricing</a>
 				</div>
 			</div>
 
@@ -88,7 +83,7 @@
 				<div class="package-header">
 					<div class="package-icon">🎞️</div>
 					<h3 class="package-name">Tributestream LEGACY</h3>
-					<div class="package-price">$1,599</div>
+					<div class="package-price">Please login for pricing</div>
 				</div>
 				<div class="package-content">
 					<p class="package-description">
@@ -111,7 +106,7 @@
 					</div>
 				</div>
 				<div class="package-footer">
-					<a href="/contact" class="btn btn-outline">Choose Legacy</a>
+					<a href="/login" class="btn btn-outline">Login to View Pricing</a>
 				</div>
 			</div>
 		</div>
@@ -151,18 +146,20 @@
 		margin: 0 auto;
 	}
 
-	.hero-title {
+	.hero h1 {
 		font-size: 3rem;
 		font-weight: 700;
 		margin-bottom: 1.5rem;
-		line-height: 1.1;
+		color: var(--color-background);
+		text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 	}
 
-	.hero-subtitle {
+	.hero p {
 		font-size: 1.25rem;
 		margin-bottom: 2rem;
-		opacity: 0.95;
-		line-height: 1.6;
+		color: var(--color-background);
+		opacity: 0.9;
+		max-width: 600px;
 	}
 
 	.main-content {
@@ -189,9 +186,12 @@
 
 	.packages-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+		grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
 		gap: 2rem;
 		margin-top: 2rem;
+		max-width: 1000px;
+		margin-left: auto;
+		margin-right: auto;
 	}
 
 	.package-card {
@@ -201,6 +201,9 @@
 		transition: transform 0.2s ease, box-shadow 0.2s ease;
 		position: relative;
 		overflow: hidden;
+		display: flex;
+		flex-direction: column;
+		height: 100%;
 	}
 
 	.package-card:hover {
@@ -248,13 +251,20 @@
 	}
 
 	.package-price {
-		font-size: 2.5rem;
-		font-weight: 700;
+		font-size: 1.25rem;
+		font-weight: 600;
 		color: var(--color-primary);
+		background: var(--color-primary-alpha);
+		padding: 0.5rem 1rem;
+		border-radius: 0.5rem;
+		display: inline-block;
 	}
 
 	.package-content {
 		padding: 2rem;
+		flex-grow: 1;
+		display: flex;
+		flex-direction: column;
 	}
 
 	.package-description {
@@ -267,7 +277,8 @@
 	.package-features {
 		list-style: none;
 		padding: 0;
-		margin: 0 0 1.5rem 0;
+		margin: 0;
+		flex-grow: 1;
 	}
 
 	.package-features li {

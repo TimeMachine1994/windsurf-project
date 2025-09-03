@@ -29,18 +29,14 @@
 		
 		<nav class="nav">
 			<ul class="nav-list">
-				<li><a href="/" class="nav-link">Home</a></li>
 				<li><a href="/for-families" class="nav-link">For Families</a></li>
-				<li><a href="/for-funeral-homes" class="nav-link">For Funeral Homes</a></li>
-				<li><a href="/packages" class="nav-link">Packages</a></li>
-				<li><a href="/blog" class="nav-link">Blog</a></li>
-				<li><a href="/contact" class="nav-link">Contact</a></li>
+				<li><a href="/for-funeral-homes" class="nav-link">For Funeral Home</a></li>
+				<li><a href="/create-memorial" class="nav-link">Create Memorial</a></li>
+				<li><a href={$authStore.user ? "/booking" : "/login"} class="nav-link">Book Livestream</a></li>
 			</ul>
 		</nav>
 		
 		<div class="header-actions">
-			<ThemeToggle />
-			
 			{#if $authStore.loading}
 				<div class="loading">Loading...</div>
 			{:else if $authStore.user}
@@ -73,8 +69,8 @@
 
 <style>
 	.header {
-		background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
-		color: white;
+		background: #000000;
+		color: var(--color-text);
 		padding: 1rem 0;
 		box-shadow: var(--shadow-lg);
 		position: sticky;
@@ -99,10 +95,13 @@
 		color: inherit;
 	}
 	
-	.logo h1 {
-		margin: 0;
+	.logo-link h1 {
 		font-size: 1.5rem;
-		font-weight: 700;
+		margin: 0;
+		color: white;
+	}
+	
+	.logo-link h1 {
 		letter-spacing: -0.025em;
 	}
 	
@@ -115,11 +114,15 @@
 	}
 	
 	.nav-link {
-		color: white;
+		color: var(--color-primary);
 		text-decoration: none;
 		font-weight: 500;
 		transition: opacity 0.2s ease;
 		position: relative;
+	}
+
+	[data-theme="dark"] .nav-link {
+		color: white;
 	}
 	
 	.nav-link:hover {
@@ -133,8 +136,12 @@
 		left: 0;
 		width: 0;
 		height: 2px;
-		background: white;
+		background: var(--color-primary);
 		transition: width 0.3s ease;
+	}
+
+	[data-theme="dark"] .nav-link::after {
+		background: white;
 	}
 	
 	.nav-link:hover::after {
@@ -153,25 +160,27 @@
 	}
 	
 	.btn-primary {
-		background: rgba(255, 255, 255, 0.2);
+		background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
 		color: white;
-		border: 1px solid rgba(255, 255, 255, 0.3);
+		border: 2px solid var(--color-primary);
 	}
-	
+
 	.btn-primary:hover {
-		background: rgba(255, 255, 255, 0.3);
+		background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-secondary-dark) 100%);
 		transform: translateY(-1px);
+		box-shadow: var(--shadow-primary);
 	}
-	
+
 	.btn-secondary {
-		background: transparent;
+		background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-primary) 100%);
 		color: white;
-		border: 1px solid rgba(255, 255, 255, 0.3);
+		border: 2px solid var(--color-secondary);
 	}
-	
+
 	.btn-secondary:hover {
-		background: rgba(255, 255, 255, 0.1);
+		background: linear-gradient(135deg, var(--color-secondary-dark) 0%, var(--color-primary-dark) 100%);
 		transform: translateY(-1px);
+		box-shadow: var(--shadow-primary);
 	}
 	
 	.auth-buttons {
@@ -186,8 +195,13 @@
 	}
 	
 	.loading {
-		color: rgba(255, 255, 255, 0.8);
+		color: var(--color-primary);
+		opacity: 0.8;
 		font-size: 0.875rem;
+	}
+
+	[data-theme="dark"] .loading {
+		color: white;
 	}
 	
 	.user-menu {
@@ -195,9 +209,9 @@
 	}
 	
 	.user-button {
-		background: rgba(255, 255, 255, 0.1);
-		border: 1px solid rgba(255, 255, 255, 0.2);
-		color: white;
+		background: transparent;
+		border: 1px solid var(--color-primary);
+		color: var(--color-primary);
 		padding: 0.5rem 1rem;
 		border-radius: 0.375rem;
 		cursor: pointer;
@@ -206,7 +220,12 @@
 		gap: 0.5rem;
 		transition: all 0.2s ease;
 	}
-	
+
+	[data-theme="dark"] .user-button {
+		border-color: white;
+		color: white;
+	}
+
 	.user-button:hover {
 		background: rgba(255, 255, 255, 0.2);
 	}

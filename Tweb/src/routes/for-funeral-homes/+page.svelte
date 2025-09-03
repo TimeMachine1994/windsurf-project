@@ -106,18 +106,20 @@
 		margin: 0 auto;
 	}
 
-	.hero-title {
+	.hero h1 {
 		font-size: 3rem;
 		font-weight: 700;
 		margin-bottom: 1.5rem;
-		line-height: 1.1;
+		color: var(--color-background);
+		text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 	}
 
-	.hero-subtitle {
+	.hero p {
 		font-size: 1.25rem;
 		margin-bottom: 2rem;
-		opacity: 0.95;
-		line-height: 1.6;
+		color: var(--color-background);
+		opacity: 0.9;
+		max-width: 600px;
 	}
 
 	.hero-buttons {

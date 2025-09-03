@@ -3,6 +3,7 @@
 	import favicon from '$lib/assets/favicon.svg';
 	import Header from '$lib/components/Header.svelte';
 	import Footer from '$lib/components/Footer.svelte';
+	import ThemeToggleFixed from '$lib/components/ThemeToggleFixed.svelte';
 	import { authStore } from '$lib/stores/auth';
 	import { theme } from '$lib/stores/theme';
 	import { onMount } from 'svelte';
@@ -27,9 +28,10 @@
 
 <div class="app">
 	<Header />
-	<main class="main-content">
-		{@render children?.()}
+	<main>
+		<slot />
 	</main>
+	<ThemeToggleFixed />
 	<Footer />
 </div>
 

@@ -226,6 +226,6 @@
 	
 	button:hover:not(:disabled) {
 		transform: translateY(-1px);
-		box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+		box-shadow: var(--shadow-primary);
 	}
 </style>
