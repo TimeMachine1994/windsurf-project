@@ -90,8 +90,7 @@
 	{/if}
 
 	<div class="action-buttons">
-		<button class="btn btn-secondary" onclick={() => { console.log('💾 Dispatching save event'); dispatch('save'); }}>Save and Pay Later</button>
-		<button class="btn btn-secondary" onclick={() => { console.log('💳 Dispatching payNow event'); dispatch('payNow'); }}>Pay Now</button>
+		<button class="btn btn-secondary full-width" onclick={() => { console.log('💾 Dispatching save event'); dispatch('save'); }}>Save and Pay Later</button>
 		<button class="btn btn-primary full-width" onclick={() => { console.log('💳 Dispatching pay event'); dispatch('pay'); }}>Continue to Payment</button>
 	</div>
 </div>
@@ -216,14 +215,14 @@
 	}
 
 	.action-buttons {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
+		display: flex;
+		flex-direction: column;
 		gap: 0.5rem;
 		padding-top: 1rem;
 	}
 
 	.full-width {
-		grid-column: span 2;
+		width: 100%;
 	}
 
 	.btn {

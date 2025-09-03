@@ -12,8 +12,14 @@
 	let loading = true;
 	let error = '';
 
-	onMount(async () => {
-		console.log('📅 Booking page loading...');
+	async function loadBookingData() {
+		console.log('📅 Loading booking data...');
+		console.log('🔍 Auth state:', { 
+			user: !!$authStore.user, 
+			profile: !!$authStore.profile, 
+			role: $authStore.profile?.role,
+			initialized: $authStore.initialized 
+		});
 		
 		if ($authStore.user && $authStore.profile?.role === 'Owner') {
 			try {
@@ -44,6 +50,17 @@
 			error = 'Access denied. Only memorial owners can book services.';
 		}
 		loading = false;
+	}
+
+	onMount(() => {
+		// Wait for auth store to be initialized before checking access
+		const unsubscribe = authStore.subscribe((state) => {
+			if (state.initialized && loading) {
+				loadBookingData();
+			}
+		});
+
+		return unsubscribe;
 	});
 </script>
 

@@ -101,6 +101,7 @@ export async function createMemorialAndUser(data: MemorialCreationData): Promise
       uid: user.uid,
       email: user.email!,
       displayName: data.creatorName,
+      phone: data.creatorPhone,
       role: 'Owner',
       createdAt: new Date(),
       updatedAt: new Date()

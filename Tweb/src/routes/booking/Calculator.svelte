@@ -4,6 +4,7 @@
 	import ServiceDetailsForm from './ServiceDetailsForm.svelte';
 	import AdditionalServicesForm from './AdditionalServicesForm.svelte';
 	import ProgressBar from './ProgressBar.svelte';
+	import SimplePaymentForm from '$lib/components/SimplePaymentForm.svelte';
 	import type {
 		CalculatorFormData,
 		Tier,
@@ -355,34 +356,71 @@
 
 	async function proceedToPayment() {
 		console.log('💳 Proceeding to payment...');
+		console.log('📊 Current state:', { memorialId, total, selectedTier, currentStep });
+		
 		if (!memorialId) {
-			console.error('Memorial ID is required to proceed to payment.');
+			console.error('❌ Memorial ID is required to proceed to payment.');
+			alert('Memorial ID is missing. Please refresh the page and try again.');
 			return;
 		}
-		const payload = {
-			formData: formData,
-			bookingItems: bookingItems,
-			total: total,
-			memorialId: memorialId
-		};
-		console.log('📦 Payload for payment:', payload);
 
-		const response = await fetch('/api/booking/payment', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(payload)
-		});
+		if (!total || total <= 0) {
+			console.error('❌ Invalid total amount:', total);
+			alert('Invalid total amount. Please check your selections.');
+			return;
+		}
 
-		const result = await response.json();
-		console.log('💳 Payment initiation response:', result);
+		try {
+			console.log('🚀 Creating payment intent with data:', {
+				amount: total,
+				memorialId,
+				customerInfo: {
+					name: data.memorial?.creatorName || formData.lovedOneName || '',
+					email: data.memorial?.creatorEmail || ''
+				}
+			});
 
-		if (result.success) {
-			console.log('✅ Payment initiated successfully!', result);
-			clientSecret = result.clientSecret;
-			configId = result.configId;
-			currentStep = 'payment';
-		} else {
-			console.error('🔥 Failed to initiate payment:', result);
+			// Create Stripe Payment Intent
+			const response = await fetch('/api/create-payment-intent', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					amount: total,
+					memorialId: memorialId,
+					customerInfo: {
+						name: data.memorial?.creatorName || formData.lovedOneName || '',
+						email: data.memorial?.creatorEmail || ''
+					}
+				})
+			});
+
+			console.log('📡 Response status:', response.status, response.statusText);
+
+			if (!response.ok) {
+				const errorText = await response.text();
+				console.error('❌ HTTP Error:', response.status, errorText);
+				alert(`Payment setup failed: ${response.status} ${response.statusText}`);
+				return;
+			}
+
+			const result = await response.json();
+			console.log('💳 Payment intent response:', result);
+
+			if (result.clientSecret) {
+				console.log('✅ Payment intent created successfully!');
+				clientSecret = result.clientSecret;
+				currentStep = 'payment';
+				
+				// Save current state
+				await saveLivestreamConfig(memorialId, formData, bookingItems, total, currentStep);
+				console.log('✅ Navigated to payment step with clientSecret:', clientSecret);
+			} else {
+				console.error('🔥 Failed to create payment intent:', result);
+				alert(`Failed to initialize payment: ${result.error || 'Unknown error'}`);
+			}
+		} catch (error) {
+			console.error('💥 Error creating payment intent:', error);
+			alert('An error occurred while setting up payment. Please try again.');
 		}
 	}
 
@@ -420,6 +458,13 @@
 		}
 	}
 
+	function handlePaymentSuccess(event: CustomEvent) {
+		console.log('🎉 Payment successful!', event.detail);
+		// Handle successful payment
+		alert('Payment successful! Thank you for your purchase.');
+		// You could redirect to a success page or update the UI
+	}
+
 	async function handlePayNow() {
 		console.log('💰 Pay Now button clicked, attempting to save data first...');
 		await saveAndPayLater(true);
@@ -438,13 +483,12 @@
 		{:else if currentStep === 'addons'}
 			<AdditionalServicesForm bind:formData />
 		{:else if currentStep === 'payment'}
-			{#if memorialId}
-				<div class="card p-6">
-					<h2 class="h2 mb-4">Payment</h2>
-					<p>Payment integration would go here.</p>
-					<p class="text-sm opacity-75 mt-2">Total: ${total}</p>
-				</div>
-			{/if}
+			<SimplePaymentForm 
+				amount={total}
+				customerName={data.memorial?.creatorName || formData.lovedOneName || ''}
+				customerEmail={data.memorial?.creatorEmail || ''}
+				on:success={handlePaymentSuccess}
+			/>
 		{/if}
 	</div>
 
@@ -514,5 +558,38 @@
 		font-size: 1.5rem;
 		font-weight: 600;
 		margin-bottom: 1rem;
+	}
+
+	.loading-spinner {
+		width: 40px;
+		height: 40px;
+		border: 4px solid #e5e7eb;
+		border-top: 4px solid #667eea;
+		border-radius: 50%;
+		animation: spin 1s linear infinite;
+		margin: 2rem auto;
+	}
+
+	@keyframes spin {
+		0% { transform: rotate(0deg); }
+		100% { transform: rotate(360deg); }
+	}
+
+	.debug-info {
+		background: #f8f9fa;
+		border: 1px solid #dee2e6;
+		border-radius: 0.5rem;
+		padding: 1rem;
+		margin: 1rem 0;
+		font-size: 0.875rem;
+	}
+
+	.debug-info p {
+		margin: 0.25rem 0;
+		color: #6c757d;
+	}
+
+	.mt-4 {
+		margin-top: 1rem;
 	}
 </style>

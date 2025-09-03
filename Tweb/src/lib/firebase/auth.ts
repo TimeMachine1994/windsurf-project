@@ -12,6 +12,7 @@ export interface UserProfile {
   uid: string;
   email: string;
   displayName?: string;
+  phone?: string;
   role: 'Viewer' | 'Owner' | 'Admin';
   createdAt: Date;
   updatedAt: Date;

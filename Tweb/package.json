@@ -28,6 +28,8 @@
 	},
 	"dependencies": {
 		"@sendgrid/mail": "^8.1.5",
-		"firebase": "^12.2.1"
+		"@stripe/stripe-js": "^7.9.0",
+		"firebase": "^12.2.1",
+		"stripe": "^18.5.0"
 	}
 }
