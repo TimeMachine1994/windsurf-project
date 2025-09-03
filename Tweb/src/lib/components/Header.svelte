@@ -23,16 +23,17 @@
 	<div class="container">
 		<div class="logo">
 			<a href="/" class="logo-link">
-				<h1>Your App</h1>
+				<h1>Tributestream</h1>
 			</a>
 		</div>
 		
 		<nav class="nav">
 			<ul class="nav-list">
 				<li><a href="/" class="nav-link">Home</a></li>
-				<li><a href="/create-memorial" class="nav-link">Create Memorial</a></li>
-				<li><a href="/booking" class="nav-link">Book Services</a></li>
-				<li><a href="/about" class="nav-link">About</a></li>
+				<li><a href="/for-families" class="nav-link">For Families</a></li>
+				<li><a href="/for-funeral-homes" class="nav-link">For Funeral Homes</a></li>
+				<li><a href="/packages" class="nav-link">Packages</a></li>
+				<li><a href="/blog" class="nav-link">Blog</a></li>
 				<li><a href="/contact" class="nav-link">Contact</a></li>
 			</ul>
 		</nav>
