@@ -240,402 +240,276 @@
 </svelte:head>
 
 {#if $authStore.user && $authStore.profile}
-	<div class="profile-page">
-		<div class="container">
-			<div class="profile-card">
-				<h1>User Profile</h1>
-				
-				<div class="profile-info">
-					<!-- Display Name Section -->
-					<div class="info-group">
-						<label>Display Name</label>
-						{#if editingName}
-							<div class="edit-form">
-								<input
-									type="text"
-									bind:value={displayName}
-									placeholder="Enter your name"
-									class="edit-input"
-									disabled={loading.name}
-								/>
-								<div class="edit-actions">
-									<button class="btn btn-save" on:click={saveDisplayName} disabled={loading.name}>
-										{loading.name ? 'Saving...' : 'Save'}
-									</button>
-									<button class="btn btn-cancel" on:click={cancelEditName} disabled={loading.name}>
-										Cancel
-									</button>
-								</div>
-							</div>
-						{:else}
-							<div class="display-row">
-								<p>{$authStore.profile.displayName || 'Not set'}</p>
-								<button class="btn btn-edit" on:click={startEditName}>Edit</button>
-							</div>
-						{/if}
-						{#if errors.name}
-							<p class="error-message">{errors.name}</p>
-						{/if}
-						{#if success.name}
-							<p class="success-message">{success.name}</p>
-						{/if}
+	<!-- Law of Proximity & Visual Hierarchy -->
+	<div class="max-w-4xl mx-auto p-6 space-y-8">
+		<!-- Profile Header - Von Restorff Effect -->
+		<div class="card p-8 bg-gradient-to-r from-primary-50 to-secondary-50 dark:from-primary-900/20 dark:to-secondary-900/20">
+			<div class="flex items-center space-x-6">
+				<div class="w-20 h-20 bg-primary-500 rounded-full flex items-center justify-center text-white text-2xl font-bold">
+					{($authStore.profile.displayName || $authStore.user.email || 'U').charAt(0).toUpperCase()}
+				</div>
+				<div class="flex-1">
+					<h1 class="h1 mb-2">Profile Settings</h1>
+					<p class="text-lg text-secondary mb-4">Manage your account information and preferences</p>
+					<div class="flex items-center space-x-4">
+						<span class="badge variant-filled-{$authStore.profile.role === 'Owner' ? 'primary' : 'secondary'}">
+							{$authStore.profile.role}
+						</span>
+						<span class="text-sm text-tertiary">
+							Member since {typeof $authStore.profile.createdAt === 'object' && 'toDate' in $authStore.profile.createdAt ? $authStore.profile.createdAt.toDate().toLocaleDateString() : new Date($authStore.profile.createdAt).toLocaleDateString()}
+						</span>
 					</div>
+				</div>
+			</div>
+		</div>
 
-					<!-- Phone Number Section -->
-					<div class="info-group">
-						<label>Phone Number</label>
-						{#if editingPhone}
-							<div class="edit-form">
-								<input
-									type="tel"
-									bind:value={phone}
-									placeholder="Enter your phone number"
-									class="edit-input"
-									disabled={loading.phone}
-								/>
-								<div class="edit-actions">
-									<button class="btn btn-save" on:click={savePhone} disabled={loading.phone}>
-										{loading.phone ? 'Saving...' : 'Save'}
-									</button>
-									<button class="btn btn-cancel" on:click={cancelEditPhone} disabled={loading.phone}>
-										Cancel
-									</button>
-								</div>
-							</div>
-						{:else}
-							<div class="display-row">
-								<p>{$authStore.profile.phone || 'Not set'}</p>
-								<button class="btn btn-edit" on:click={startEditPhone}>Edit</button>
-							</div>
-						{/if}
-						{#if errors.phone}
-							<p class="error-message">{errors.phone}</p>
-						{/if}
-						{#if success.phone}
-							<p class="success-message">{success.phone}</p>
-						{/if}
+	<!-- Personal Information Section - Law of Common Region -->
+	<div class="card p-6">
+		<h2 class="h2 mb-6 flex items-center">
+			<svg class="w-6 h-6 mr-3 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+			</svg>
+			Personal Information
+		</h2>
+		<!-- Display Name - Hick's Law (simple edit interface) -->
+		<div class="space-y-4 pb-6 border-b border-surface-200 dark:border-surface-700">
+			<label for="displayName" class="label">
+				<span class="font-semibold">Display Name</span>
+			</label>
+			{#if editingName}
+				<div class="flex flex-col sm:flex-row gap-3">
+					<input
+						id="displayName"
+						type="text"
+						bind:value={displayName}
+						class="input flex-1"
+						placeholder="Enter your display name"
+						disabled={loading.name}
+					/>
+					<div class="flex gap-2">
+						<button
+							type="button"
+							class="btn variant-filled-primary"
+							on:click={saveDisplayName}
+							disabled={loading.name}
+						>
+							{loading.name ? 'Saving...' : 'Save'}
+						</button>
+						<button
+							type="button"
+							class="btn variant-ghost-surface"
+							on:click={() => { editingName = false; displayName = $authStore.profile?.displayName || ''; }}
+							disabled={loading.name}
+						>
+							Cancel
+						</button>
 					</div>
+				</div>
+			{:else}
+				<div class="flex items-center justify-between p-4 bg-surface-50 dark:bg-surface-800 rounded-lg">
+					<span class="text-lg">{$authStore.profile.displayName || 'Not set'}</span>
+					<button
+						type="button"
+						class="btn variant-ghost-primary btn-sm"
+						on:click={() => editingName = true}
+					>
+						Edit
+					</button>
+				</div>
+			{/if}
+			{#if errors.name}
+				<aside class="alert variant-filled-error mt-2">
+					<div class="alert-message">
+						<p>{errors.name}</p>
+					</div>
+				</aside>
+			{/if}
+			{#if success.name}
+				<aside class="alert variant-filled-success mt-2">
+					<div class="alert-message">
+						<p>{success.name}</p>
+					</div>
+				</aside>
+			{/if}
+		</div>
 
-					<!-- Email Section -->
-					<div class="info-group">
-						<label>Email</label>
-						{#if editingEmail}
-							<div class="edit-form">
-								<input
-									type="email"
-									bind:value={newEmail}
-									placeholder="Enter new email address"
-									class="edit-input"
-									disabled={loading.email}
-								/>
-								<input
-									type="password"
-									bind:value={currentPassword}
-									placeholder="Current password (required)"
-									class="edit-input"
-									disabled={loading.email}
-								/>
-								<div class="edit-actions">
-									<button class="btn btn-save" on:click={saveEmail} disabled={loading.email}>
-										{loading.email ? 'Updating...' : 'Update Email'}
-									</button>
-									<button class="btn btn-cancel" on:click={cancelEditEmail} disabled={loading.email}>
-										Cancel
-									</button>
-								</div>
-								<p class="help-text">A verification email will be sent to your new address.</p>
+				<!-- Phone Number Section -->
+				<div class="info-group">
+					{#if editingPhone}
+						<label for="phone-input">Phone Number</label>
+						<div class="edit-form">
+							<input
+								id="phone-input"
+								type="tel"
+								bind:value={phone}
+								placeholder="Enter your phone number"
+								class="edit-input"
+								disabled={loading.phone}
+							/>
+							<div class="edit-actions">
+								<button class="btn btn-save" on:click={savePhone} disabled={loading.phone}>
+									{loading.phone ? 'Saving...' : 'Save'}
+								</button>
+								<button class="btn btn-cancel" on:click={cancelEditPhone} disabled={loading.phone}>
+									Cancel
+								</button>
 							</div>
-						{:else}
-							<div class="display-row">
-								<p>{$authStore.user.email}</p>
-								<button class="btn btn-edit" on:click={startEditEmail}>Edit</button>
+						</div>
+					{:else}
+						<div class="display-row">
+							<span class="label-text">Phone Number</span>
+							<p>{$authStore.profile.phone || 'Not set'}</p>
+							<button class="btn btn-edit" on:click={startEditPhone}>Edit</button>
+						</div>
+					{/if}
+					{#if errors.phone}
+						<aside class="alert variant-filled-error mt-2">
+							<div class="alert-message">
+								<p>{errors.phone}</p>
 							</div>
-						{/if}
-						{#if errors.email}
-							<p class="error-message">{errors.email}</p>
-						{/if}
-						{#if success.email}
-							<p class="success-message">{success.email}</p>
-						{/if}
-					</div>
+						</aside>
+					{/if}
+					{#if success.phone}
+						<aside class="alert variant-filled-success mt-2">
+							<div class="alert-message">
+								<p>{success.phone}</p>
+							</div>
+						</aside>
+					{/if}
+				</div>
 
-					<!-- Password Section -->
-					<div class="info-group">
-						<label>Password</label>
-						{#if editingPassword}
-							<div class="edit-form">
-								<input
-									type="password"
-									bind:value={newPassword}
-									placeholder="New password (min 6 characters)"
-									class="edit-input"
-									disabled={loading.password}
-								/>
-								<input
-									type="password"
-									bind:value={confirmPassword}
-									placeholder="Confirm new password"
-									class="edit-input"
-									disabled={loading.password}
-								/>
-								<div class="edit-actions">
-									<button class="btn btn-save" on:click={savePassword} disabled={loading.password}>
-										{loading.password ? 'Updating...' : 'Update Password'}
-									</button>
-									<button class="btn btn-cancel" on:click={cancelEditPassword} disabled={loading.password}>
-										Cancel
-									</button>
-								</div>
+				<!-- Email Section -->
+				<div class="info-group">
+					{#if editingEmail}
+						<label for="email-input">Email</label>
+						<div class="edit-form">
+							<input
+								id="email-input"
+								type="email"
+								bind:value={newEmail}
+								placeholder="Enter new email"
+								class="edit-input"
+								disabled={loading.email}
+							/>
+							<input
+								type="password"
+								bind:value={currentPassword}
+								placeholder="Current password (required)"
+								class="edit-input"
+								disabled={loading.email}
+							/>
+							<div class="edit-actions">
+								<button class="btn btn-save" on:click={saveEmail} disabled={loading.email}>
+									{loading.email ? 'Updating...' : 'Update Email'}
+								</button>
+								<button class="btn btn-cancel" on:click={cancelEditEmail} disabled={loading.email}>
+									Cancel
+								</button>
 							</div>
-						{:else}
-							<div class="display-row">
-								<p>••••••••</p>
-								<button class="btn btn-edit" on:click={startEditPassword}>Change Password</button>
+							<p class="help-text">A verification email will be sent to your new address.</p>
+						</div>
+					{:else}
+						<div class="display-row">
+							<span class="label-text">Email</span>
+							<p>{$authStore.profile.email}</p>
+							<button class="btn btn-edit" on:click={startEditEmail}>Edit</button>
+						</div>
+					{/if}
+					{#if errors.email}
+						<aside class="alert variant-filled-error mt-2">
+							<div class="alert-message">
+								<p>{errors.email}</p>
 							</div>
-						{/if}
-						{#if errors.password}
-							<p class="error-message">{errors.password}</p>
-						{/if}
-						{#if success.password}
-							<p class="success-message">{success.password}</p>
-						{/if}
-					</div>
-					
-					<!-- Read-only fields -->
-					<div class="info-group">
-						<label>Role</label>
+						</aside>
+					{/if}
+					{#if success.email}
+						<aside class="alert variant-filled-success mt-2">
+							<div class="alert-message">
+								<p>{success.email}</p>
+							</div>
+						</aside>
+					{/if}
+				</div>
+
+				<!-- Password Section -->
+				<div class="info-group">
+					{#if editingPassword}
+						<label for="password-input">Password</label>
+						<div class="edit-form">
+							<input
+								id="password-input"
+								type="password"
+								bind:value={newPassword}
+								placeholder="Enter new password"
+								class="edit-input"
+								disabled={loading.password}
+							/>
+							<input
+								type="password"
+								bind:value={confirmPassword}
+								placeholder="Confirm new password"
+								class="edit-input"
+								disabled={loading.password}
+							/>
+							<div class="edit-actions">
+								<button class="btn btn-save" on:click={savePassword} disabled={loading.password}>
+									{loading.password ? 'Updating...' : 'Update Password'}
+								</button>
+								<button class="btn btn-cancel" on:click={cancelEditPassword} disabled={loading.password}>
+									Cancel
+								</button>
+							</div>
+						</div>
+					{:else}
+						<div class="display-row">
+							<span class="label-text">Password</span>
+							<p>••••••••</p>
+							<button class="btn btn-edit" on:click={startEditPassword}>Change</button>
+						</div>
+					{/if}
+					{#if errors.password}
+						<aside class="alert variant-filled-error mt-2">
+							<div class="alert-message">
+								<p>{errors.password}</p>
+							</div>
+						</aside>
+					{/if}
+					{#if success.password}
+						<aside class="alert variant-filled-success mt-2">
+							<div class="alert-message">
+								<p>{success.password}</p>
+							</div>
+						</aside>
+					{/if}
+				</div>
+
+				<!-- Role Section -->
+				<div class="info-group">
+					<div class="display-row">
+						<span class="label-text">Role</span>
 						<p class="role-badge role-{$authStore.profile.role.toLowerCase()}">
 							{$authStore.profile.role}
 						</p>
 					</div>
-					
-					<div class="info-group">
-						<label>Member Since</label>
-						<p>{$authStore.profile.createdAt?.toDate?.() ? $authStore.profile.createdAt.toDate().toLocaleDateString() : 'N/A'}</p>
+				</div>
+
+				<!-- Member Since Section -->
+				<div class="info-group">
+					<div class="display-row">
+						<span class="label-text">Member Since</span>
+						<p>{typeof $authStore.profile.createdAt === 'object' && 'toDate' in $authStore.profile.createdAt ? $authStore.profile.createdAt.toDate().toLocaleDateString() : new Date($authStore.profile.createdAt).toLocaleDateString()}</p>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 {:else if $authStore.loading}
-	<div class="loading-container">
-		<p>Loading profile...</p>
+	<div class="flex flex-col items-center justify-center py-20">
+		<div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500 mb-4"></div>
+		<p class="text-lg text-secondary">Loading profile...</p>
+	</div>
+{:else}
+	<div class="flex flex-col items-center justify-center py-20">
+		<p class="text-lg text-secondary">Please log in to view your profile.</p>
 	</div>
 {/if}
-
-<style>
-	.profile-page {
-		padding: 2rem 1rem;
-		min-height: 80vh;
-	}
-	
-	.container {
-		max-width: 600px;
-		margin: 0 auto;
-	}
-	
-	.profile-card {
-		background: white;
-		padding: 2rem;
-		border-radius: 0.5rem;
-		box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-	}
-	
-	h1 {
-		margin: 0 0 2rem 0;
-		color: #1f2937;
-		text-align: center;
-	}
-	
-	.profile-info {
-		display: flex;
-		flex-direction: column;
-		gap: 1.5rem;
-	}
-	
-	.info-group {
-		display: flex;
-		flex-direction: column;
-		gap: 0.5rem;
-	}
-	
-	label {
-		font-weight: 600;
-		color: #374151;
-		font-size: 0.875rem;
-		text-transform: uppercase;
-		letter-spacing: 0.05em;
-	}
-	
-	p {
-		margin: 0;
-		color: #1f2937;
-		font-size: 1rem;
-	}
-	
-	.role-badge {
-		display: inline-block;
-		padding: 0.25rem 0.75rem;
-		border-radius: 9999px;
-		font-size: 0.875rem;
-		font-weight: 500;
-		text-transform: uppercase;
-		letter-spacing: 0.025em;
-	}
-	
-	.role-viewer {
-		background: #dbeafe;
-		color: #1e40af;
-	}
-	
-	.role-owner {
-		background: #dcfce7;
-		color: #166534;
-	}
-	
-	.role-admin {
-		background: #fef3c7;
-		color: #92400e;
-	}
-	
-	.loading-container {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		min-height: 80vh;
-		color: #6b7280;
-	}
-
-	.display-row {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		gap: 1rem;
-	}
-
-	.edit-form {
-		display: flex;
-		flex-direction: column;
-		gap: 1rem;
-	}
-
-	.edit-input {
-		padding: 0.75rem;
-		border: 2px solid #e5e7eb;
-		border-radius: 0.5rem;
-		font-size: 1rem;
-		transition: border-color 0.2s ease;
-	}
-
-	.edit-input:focus {
-		outline: none;
-		border-color: #667eea;
-		box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-	}
-
-	.edit-input:disabled {
-		background-color: #f9fafb;
-		cursor: not-allowed;
-		opacity: 0.6;
-	}
-
-	.edit-actions {
-		display: flex;
-		gap: 0.75rem;
-	}
-
-	.btn {
-		padding: 0.5rem 1rem;
-		border: none;
-		border-radius: 0.375rem;
-		font-size: 0.875rem;
-		font-weight: 500;
-		cursor: pointer;
-		transition: all 0.2s ease;
-		text-decoration: none;
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		min-width: 80px;
-	}
-
-	.btn:disabled {
-		opacity: 0.6;
-		cursor: not-allowed;
-	}
-
-	.btn-edit {
-		background: #f3f4f6;
-		color: #374151;
-		border: 1px solid #d1d5db;
-	}
-
-	.btn-edit:hover:not(:disabled) {
-		background: #e5e7eb;
-		border-color: #9ca3af;
-	}
-
-	.btn-save {
-		background: linear-gradient(135deg, #059669 0%, #047857 100%);
-		color: white;
-	}
-
-	.btn-save:hover:not(:disabled) {
-		transform: translateY(-1px);
-		box-shadow: 0 4px 12px rgba(5, 150, 105, 0.4);
-	}
-
-	.btn-cancel {
-		background: #f9fafb;
-		color: #6b7280;
-		border: 1px solid #d1d5db;
-	}
-
-	.btn-cancel:hover:not(:disabled) {
-		background: #f3f4f6;
-		color: #374151;
-	}
-
-	.error-message {
-		color: #dc2626;
-		font-size: 0.875rem;
-		margin: 0.5rem 0 0 0;
-		padding: 0.5rem;
-		background: #fef2f2;
-		border: 1px solid #fecaca;
-		border-radius: 0.375rem;
-	}
-
-	.success-message {
-		color: #059669;
-		font-size: 0.875rem;
-		margin: 0.5rem 0 0 0;
-		padding: 0.5rem;
-		background: #f0fdf4;
-		border: 1px solid #bbf7d0;
-		border-radius: 0.375rem;
-	}
-
-	.help-text {
-		font-size: 0.75rem;
-		color: #6b7280;
-		margin: 0;
-		font-style: italic;
-	}
-
-	@media (max-width: 768px) {
-		.display-row {
-			flex-direction: column;
-			align-items: stretch;
-			gap: 0.5rem;
-		}
-
-		.edit-actions {
-			flex-direction: column;
-		}
-
-		.btn {
-			width: 100%;
-		}
-	}
-</style>

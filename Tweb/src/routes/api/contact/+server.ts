@@ -78,8 +78,8 @@ ${message}
 		console.error('Contact form error:', error);
 		
 		// Handle SendGrid specific errors
-		if (error.response) {
-			console.error('SendGrid error:', error.response.body);
+		if ((error as any)?.response) {
+			console.error('SendGrid error:', (error as any).response.body);
 		}
 		
 		return json(

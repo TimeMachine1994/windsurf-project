@@ -81,10 +81,9 @@
 			console.log('✅ Elements mounted to DOM');
 			
 			// Listen for changes
-			paymentElement.on('change', (event) => {
+			paymentElement.on('change', (event: any) => {
 				console.log('💳 Payment element change:', { 
 					complete: event.complete, 
-					error: event.error,
 					empty: event.empty,
 					value: event.value 
 				});
@@ -109,10 +108,9 @@
 				console.log('👁️ Payment element blurred');
 			});
 			
-			addressElement.on('change', (event) => {
+			addressElement.on('change', (event: any) => {
 				console.log('🏠 Address element change:', { 
 					complete: event.complete, 
-					error: event.error,
 					value: event.value 
 				});
 				if (event.error) {
@@ -184,12 +182,12 @@
 	
 	<div class="payment-form">
 		<div class="form-section">
-			<label class="section-label">Billing Address</label>
+			<div class="section-label" role="group" aria-label="Billing Address">Billing Address</div>
 			<div bind:this={addressElementContainer} class="stripe-element"></div>
 		</div>
 		
 		<div class="form-section">
-			<label class="section-label">Payment Method</label>
+			<div class="section-label" role="group" aria-label="Payment Method">Payment Method</div>
 			<div bind:this={paymentElementContainer} class="stripe-element"></div>
 		</div>
 		
@@ -238,184 +236,3 @@
 	</div>
 </div>
 
-<style>
-	.stripe-payment-container {
-		max-width: 500px;
-		margin: 0 auto;
-	}
-	
-	.payment-header {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		margin-bottom: 2rem;
-		padding-bottom: 1rem;
-		border-bottom: 1px solid #e5e7eb;
-	}
-	
-	.payment-header h3 {
-		margin: 0;
-		font-size: 1.5rem;
-		font-weight: 600;
-		color: #374151;
-	}
-	
-	.amount-display {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-		font-size: 1.25rem;
-		font-weight: 600;
-	}
-	
-	.amount-label {
-		color: #6b7280;
-	}
-	
-	.amount-value {
-		color: #667eea;
-	}
-	
-	.payment-form {
-		display: flex;
-		flex-direction: column;
-		gap: 1.5rem;
-	}
-	
-	.form-section {
-		display: flex;
-		flex-direction: column;
-		gap: 0.75rem;
-	}
-	
-	.section-label {
-		font-weight: 500;
-		color: #374151;
-		font-size: 0.875rem;
-	}
-	
-	.stripe-element {
-		border: 1px solid #d1d5db;
-		border-radius: 8px;
-		padding: 12px;
-		background: white;
-	}
-	
-	.error-message {
-		color: #dc2626;
-		font-size: 0.875rem;
-		padding: 0.75rem;
-		background: #fef2f2;
-		border: 1px solid #fecaca;
-		border-radius: 0.5rem;
-	}
-	
-	.pay-button {
-		width: 100%;
-		padding: 1rem;
-		border: none;
-		border-radius: 0.5rem;
-		font-size: 1rem;
-		font-weight: 600;
-		cursor: pointer;
-		transition: all 0.2s ease;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 0.5rem;
-	}
-	
-	.pay-button.enabled {
-		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-		color: white;
-	}
-	
-	.pay-button.enabled:hover {
-		transform: translateY(-1px);
-		box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-	}
-	
-	.pay-button.disabled {
-		background: #f3f4f6;
-		color: #9ca3af;
-		cursor: not-allowed;
-	}
-	
-	.loading-spinner {
-		width: 16px;
-		height: 16px;
-		border: 2px solid transparent;
-		border-top: 2px solid currentColor;
-		border-radius: 50%;
-		animation: spin 1s linear infinite;
-	}
-	
-	@keyframes spin {
-		0% { transform: rotate(0deg); }
-		100% { transform: rotate(360deg); }
-	}
-	
-	.test-info.mt-4 {
-		margin-top: 1rem;
-	}
-	
-	.debug-payment-state {
-		background: #fff3cd;
-		border: 1px solid #ffeaa7;
-		border-radius: 0.5rem;
-		padding: 0.75rem;
-		margin: 1rem 0;
-		font-size: 0.875rem;
-	}
-	
-	.debug-payment-state p {
-		margin: 0.25rem 0;
-		color: #856404;
-	}
-	
-	.test-info {
-		padding: 1rem;
-		background: #f8fafc;
-		border-radius: 0.5rem;
-		border: 1px solid #e2e8f0;
-	}
-	
-	.test-info h4 {
-		margin: 0 0 0.75rem 0;
-		font-size: 0.875rem;
-		font-weight: 600;
-		color: #374151;
-	}
-	
-	.test-cards {
-		display: flex;
-		flex-direction: column;
-		gap: 0.25rem;
-		margin-bottom: 0.75rem;
-	}
-	
-	.test-card {
-		font-size: 0.75rem;
-		color: #6b7280;
-		font-family: monospace;
-	}
-	
-	.test-note {
-		font-size: 0.75rem;
-		color: #6b7280;
-		margin: 0;
-		font-style: italic;
-	}
-	
-	@media (max-width: 768px) {
-		.payment-header {
-			flex-direction: column;
-			align-items: flex-start;
-			gap: 0.5rem;
-		}
-		
-		.amount-display {
-			font-size: 1.125rem;
-		}
-	}
-</style>

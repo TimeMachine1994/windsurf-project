@@ -26,23 +26,19 @@
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-<div class="app">
-	<Header />
-	<main>
-		<slot />
+<div class="flex flex-col min-h-screen">
+	<header class="flex-shrink-0">
+		<Header />
+	</header>
+	
+	<main class="flex-1">
+		{@render children()}
 	</main>
-	<ThemeToggleFixed />
-	<Footer />
+	
+	<footer class="flex-shrink-0">
+		<Footer />
+	</footer>
 </div>
 
-<style>
-	.app {
-		min-height: 100vh;
-		display: flex;
-		flex-direction: column;
-	}
-	
-	.main-content {
-		flex: 1;
-	}
-</style>
+<ThemeToggleFixed />
+

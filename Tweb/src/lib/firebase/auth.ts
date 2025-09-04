@@ -14,8 +14,8 @@ export interface UserProfile {
   displayName?: string;
   phone?: string;
   role: 'Viewer' | 'Owner' | 'Admin';
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: Date | { toDate(): Date };
+  updatedAt: Date | { toDate(): Date };
 }
 
 // Register new user with email and password

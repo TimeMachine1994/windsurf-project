@@ -19,280 +19,126 @@
 	}
 </script>
 
-<header class="header">
-	<div class="container">
-		<div class="logo">
-			<a href="/" class="logo-link">
-				<h1>Tributestream</h1>
-			</a>
-		</div>
-		
-		<nav class="nav">
-			<ul class="nav-list">
-				<li><a href="/for-families" class="nav-link">For Families</a></li>
-				<li><a href="/for-funeral-homes" class="nav-link">For Funeral Home</a></li>
-				<li><a href="/create-memorial" class="nav-link">Create Memorial</a></li>
-				<li><a href={$authStore.user ? "/booking" : "/login"} class="nav-link">Book Livestream</a></li>
-			</ul>
-		</nav>
-		
-		<div class="header-actions">
-			{#if $authStore.loading}
-				<div class="loading">Loading...</div>
-			{:else if $authStore.user}
-				<div class="user-menu">
-					<button class="user-button" on:click={toggleUserMenu}>
-						<span class="user-info">
-							{$authStore.profile?.displayName || $authStore.user.email}
-							<span class="user-role">({$authStore.profile?.role || 'Viewer'})</span>
-						</span>
-						<span class="dropdown-arrow">▼</span>
-					</button>
-					
-					{#if showUserMenu}
-						<div class="dropdown-menu">
-							<a href="/profile" class="dropdown-item">Profile</a>
-							<a href="/schedule" class="dropdown-item">Livestream Schedule</a>
-							<button class="dropdown-item" on:click={handleSignOut}>Sign Out</button>
-						</div>
-					{/if}
-				</div>
-			{:else}
-				<div class="auth-buttons">
-					<a href="/login" class="btn btn-secondary">Sign In</a>
-					<a href="/register" class="btn btn-primary">Register</a>
-				</div>
-			{/if}
+<!-- Header - Jakob's Law (familiar navigation pattern) & Fitts's Law (larger targets) -->
+<header class="bg-white dark:bg-surface-900 shadow-lg border-b border-surface-200 dark:border-surface-700">
+	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+		<div class="flex items-center justify-between h-16">
+			<!-- Logo - Law of Proximity (grouped with brand) -->
+			<div class="flex items-center">
+				<a href="/" class="flex items-center space-x-2 text-2xl font-bold text-primary-600 hover:text-primary-700 transition-colors">
+					<div class="w-8 h-8 bg-primary-500 rounded-lg flex items-center justify-center">
+						<span class="text-white font-bold text-sm">T</span>
+					</div>
+					<span>Tributestream</span>
+				</a>
+			</div>
+			
+			<!-- Navigation - Miller's Rule (limited menu items) -->
+			<div class="hidden lg:flex items-center justify-end flex-1">
+				<nav class="flex items-center space-x-8">
+					<a href="/for-families" 
+						class="text-surface-700 dark:text-surface-300 hover:text-primary-600 dark:hover:text-primary-400 px-3 py-2 text-sm font-medium transition-colors">
+						For Families
+					</a>
+					<a href="/for-funeral-homes" 
+						class="text-surface-700 dark:text-surface-300 hover:text-primary-600 dark:hover:text-primary-400 px-3 py-2 text-sm font-medium transition-colors">
+						For Funeral Homes
+					</a>
+					<a href="/create-memorial" 
+						class="text-surface-700 dark:text-surface-300 hover:text-primary-600 dark:hover:text-primary-400 px-3 py-2 text-sm font-medium transition-colors">
+						Create Memorial
+					</a>
+					<a href="/contact" 
+						class="text-surface-700 dark:text-surface-300 hover:text-primary-600 dark:hover:text-primary-400 px-3 py-2 text-sm font-medium transition-colors">
+						Contact Us
+					</a>
+					<!-- Von Restorff Effect - CTA stands out -->
+					<a href={$authStore.user ? "/booking" : "/login"} 
+						class="bg-primary-500 hover:bg-primary-600 text-white px-6 py-2 rounded-lg text-sm font-semibold transition-all duration-200 hover:scale-105 shadow-md">
+						Get Started
+					</a>
+				</nav>
+			</div>
+			
+			<!-- User Menu & Mobile Menu -->
+			<div class="flex items-center space-x-4">
+				{#if $authStore.loading}
+					<div class="text-surface-500 text-sm">Loading...</div>
+				{:else if $authStore.user}
+					<!-- User Menu - Law of Proximity (grouped user actions) -->
+					<div class="relative">
+						<button 
+							class="flex items-center space-x-3 p-2 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-800 transition-colors"
+							on:click={toggleUserMenu}
+							aria-label="User menu"
+						>
+							<div class="w-10 h-10 bg-primary-500 rounded-full flex items-center justify-center text-white font-semibold">
+								{($authStore.profile?.displayName || $authStore.user.email || '').charAt(0).toUpperCase()}
+							</div>
+							<div class="hidden sm:block text-left">
+								<div class="text-sm font-medium text-surface-900 dark:text-surface-100">
+									{$authStore.profile?.displayName || $authStore.user.email}
+								</div>
+								<div class="text-xs text-surface-500 dark:text-surface-400">
+									{$authStore.profile?.role || 'Viewer'}
+								</div>
+							</div>
+							<svg class="w-4 h-4 text-surface-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+							</svg>
+						</button>
+						
+						{#if showUserMenu}
+							<!-- Law of Common Region - grouped menu items -->
+							<div class="absolute right-0 top-full mt-2 w-56 bg-white dark:bg-surface-800 rounded-lg shadow-xl border border-surface-200 dark:border-surface-600 z-50">
+								<div class="py-2">
+									<a href="/profile" 
+										class="flex items-center px-4 py-3 text-sm text-surface-700 dark:text-surface-300 hover:bg-surface-50 dark:hover:bg-surface-700 transition-colors">
+										<svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+										</svg>
+										Profile Settings
+									</a>
+									<a href="/schedule" 
+										class="flex items-center px-4 py-3 text-sm text-surface-700 dark:text-surface-300 hover:bg-surface-50 dark:hover:bg-surface-700 transition-colors">
+										<svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+										</svg>
+										Livestream Schedule
+									</a>
+									<hr class="my-2 border-surface-200 dark:border-surface-600">
+									<button 
+										class="flex items-center w-full px-4 py-3 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+										on:click={handleSignOut}>
+										<svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+										</svg>
+										Sign Out
+									</button>
+								</div>
+							</div>
+						{/if}
+					</div>
+				{:else}
+					<!-- Auth Actions - Hick's Law (simplified choices) -->
+					<div class="flex items-center space-x-3">
+						<a href="/login" 
+							class="text-surface-700 dark:text-surface-300 hover:text-primary-600 dark:hover:text-primary-400 px-4 py-2 text-sm font-medium transition-colors">
+							Sign In
+						</a>
+					</div>
+				{/if}
+				
+				<!-- Mobile Menu Button - Fitts's Law (larger touch target) -->
+				<button 
+					class="lg:hidden p-2 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-800 transition-colors"
+					aria-label="Open mobile menu">
+					<svg class="w-6 h-6 text-surface-600 dark:text-surface-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+					</svg>
+				</button>
+			</div>
 		</div>
 	</div>
 </header>
 
-<style>
-	.header {
-		background: #000000;
-		color: var(--color-text);
-		padding: 1rem 0;
-		box-shadow: var(--shadow-lg);
-		position: sticky;
-		top: 0;
-		z-index: 100;
-		transition: all 0.3s ease;
-	}
-	
-	.container {
-		max-width: 1200px;
-		margin: 0 auto;
-		padding: 0 1rem;
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		flex-wrap: wrap;
-		gap: 1rem;
-	}
-	
-	.logo-link {
-		text-decoration: none;
-		color: inherit;
-	}
-	
-	.logo-link h1 {
-		font-size: 1.5rem;
-		margin: 0;
-		color: white;
-	}
-	
-	.logo-link h1 {
-		letter-spacing: -0.025em;
-	}
-	
-	.nav-list {
-		display: flex;
-		list-style: none;
-		margin: 0;
-		padding: 0;
-		gap: 2rem;
-	}
-	
-	.nav-link {
-		color: var(--color-primary);
-		text-decoration: none;
-		font-weight: 500;
-		transition: opacity 0.2s ease;
-		position: relative;
-	}
-
-	[data-theme="dark"] .nav-link {
-		color: white;
-	}
-	
-	.nav-link:hover {
-		opacity: 0.8;
-	}
-	
-	.nav-link::after {
-		content: '';
-		position: absolute;
-		bottom: -4px;
-		left: 0;
-		width: 0;
-		height: 2px;
-		background: var(--color-primary);
-		transition: width 0.3s ease;
-	}
-
-	[data-theme="dark"] .nav-link::after {
-		background: white;
-	}
-	
-	.nav-link:hover::after {
-		width: 100%;
-	}
-	
-	.btn {
-		padding: 0.5rem 1rem;
-		border: none;
-		border-radius: 0.375rem;
-		font-weight: 500;
-		cursor: pointer;
-		transition: all 0.2s ease;
-		text-decoration: none;
-		display: inline-block;
-	}
-	
-	.btn-primary {
-		background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
-		color: white;
-		border: 2px solid var(--color-primary);
-	}
-
-	.btn-primary:hover {
-		background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-secondary-dark) 100%);
-		transform: translateY(-1px);
-		box-shadow: var(--shadow-primary);
-	}
-
-	.btn-secondary {
-		background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-primary) 100%);
-		color: white;
-		border: 2px solid var(--color-secondary);
-	}
-
-	.btn-secondary:hover {
-		background: linear-gradient(135deg, var(--color-secondary-dark) 0%, var(--color-primary-dark) 100%);
-		transform: translateY(-1px);
-		box-shadow: var(--shadow-primary);
-	}
-	
-	.auth-buttons {
-		display: flex;
-		gap: 0.5rem;
-	}
-	
-	.header-actions {
-		display: flex;
-		align-items: center;
-		gap: 1rem;
-	}
-	
-	.loading {
-		color: var(--color-primary);
-		opacity: 0.8;
-		font-size: 0.875rem;
-	}
-
-	[data-theme="dark"] .loading {
-		color: white;
-	}
-	
-	.user-menu {
-		position: relative;
-	}
-	
-	.user-button {
-		background: transparent;
-		border: 1px solid var(--color-primary);
-		color: var(--color-primary);
-		padding: 0.5rem 1rem;
-		border-radius: 0.375rem;
-		cursor: pointer;
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-		transition: all 0.2s ease;
-	}
-
-	[data-theme="dark"] .user-button {
-		border-color: white;
-		color: white;
-	}
-
-	.user-button:hover {
-		background: rgba(255, 255, 255, 0.2);
-	}
-	
-	.user-info {
-		font-size: 0.875rem;
-	}
-	
-	.user-role {
-		opacity: 0.8;
-		font-size: 0.75rem;
-	}
-	
-	.dropdown-arrow {
-		font-size: 0.75rem;
-		transition: transform 0.2s ease;
-	}
-	
-	.dropdown-menu {
-		position: absolute;
-		top: 100%;
-		right: 0;
-		background: var(--color-surface);
-		border: 1px solid var(--color-border);
-		border-radius: 0.375rem;
-		box-shadow: var(--shadow-lg);
-		min-width: 150px;
-		z-index: 1000;
-		margin-top: 0.5rem;
-	}
-	
-	.dropdown-item {
-		display: block;
-		width: 100%;
-		padding: 0.75rem 1rem;
-		color: var(--color-text);
-		text-decoration: none;
-		border: none;
-		background: none;
-		cursor: pointer;
-		font-size: 0.875rem;
-		text-align: left;
-		transition: background-color 0.2s ease;
-	}
-	
-	.dropdown-item:hover {
-		background: var(--color-surface-hover);
-	}
-	
-	.dropdown-item:first-child {
-		border-radius: 0.375rem 0.375rem 0 0;
-	}
-	
-	.dropdown-item:last-child {
-		border-radius: 0 0 0.375rem 0.375rem;
-	}
-	
-	@media (max-width: 768px) {
-		.container {
-			flex-direction: column;
-			text-align: center;
-		}
-		
-		.nav-list {
-			flex-wrap: wrap;
-			justify-content: center;
-			gap: 1rem;
-		}
-	}
-</style>

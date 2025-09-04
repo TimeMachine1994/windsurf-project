@@ -61,19 +61,23 @@
 	<h2 class="h2 text-center mb-6">Choose Your Package</h2>
 	<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 		{#each tiers as tier}
-			<button
-				class="card preset-filled-surface-200-800 p-4 text-left space-y-4 transition-all duration-200 card-hover"
-				class:preset-outlined-primary-500={selectedTier === tier.alias}
+			<div 
+				class="card {selectedTier === tier.alias ? 'preset-outlined-primary ring-2 ring-primary-500/40' : 'preset-outlined'} p-4 cursor-pointer transition-all duration-200 hover:-translate-y-0.5"
+				role="button"
+				tabindex="0"
 				onclick={() => dispatch('change', tier.alias as Tier)}
+				onkeydown={(e) => e.key === 'Enter' && dispatch('change', tier.alias as Tier)}
 			>
-				<h3 class="h3">{tier.name}</h3>
-				<p class="h1 font-bold text-primary-500">${tier.price}</p>
-				<ul class="list-disc list-inside space-y-2">
-					{#each tier.features as feature}
-						<li>{feature}</li>
-					{/each}
-				</ul>
-			</button>
+				<div class="space-y-4">
+					<h3 class="h3">{tier.name}</h3>
+					<p class="h1 font-bold text-primary-500">${tier.price}</p>
+					<ul class="list-disc list-inside space-y-2 text-sm">
+						{#each tier.features as feature}
+							<li>{feature}</li>
+						{/each}
+					</ul>
+				</div>
+			</div>
 		{/each}
 	</div>
 </div>

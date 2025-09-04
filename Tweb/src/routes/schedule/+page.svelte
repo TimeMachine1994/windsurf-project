@@ -10,6 +10,9 @@
 	let livestreamConfig: LivestreamConfig | null = null;
 	let loading = true;
 	let error = '';
+	let showCreateMemorialPrompt = false;
+	let creatingMemorial = false;
+	let lovedOneName = '';
 
 	onMount(async () => {
 		if ($authStore.user && $authStore.profile?.role === 'Owner') {
@@ -20,7 +23,9 @@
 				
 				if (memorial) {
 					// Load livestream configuration
-					livestreamConfig = await getLivestreamConfig(memorial.customUrl);
+					if (memorial.customUrl) {
+						livestreamConfig = await getLivestreamConfig(memorial.customUrl);
+					}
 					console.log('📊 Livestream config loaded:', livestreamConfig);
 				}
 			} catch (err: any) {
@@ -28,7 +33,8 @@
 				error = 'Failed to load memorial data';
 			}
 		} else {
-			error = 'Access denied. Only memorial owners can view schedules.';
+			// For viewers, show memorial creation option instead of access error
+			showCreateMemorialPrompt = true;
 		}
 		loading = false;
 	});
@@ -36,6 +42,24 @@
 	function handleEditSchedule() {
 		console.log('📝 Edit schedule clicked');
 		window.location.href = '/booking';
+	}
+
+	async function handleCreateMemorial() {
+		if (!lovedOneName.trim()) {
+			error = 'Please enter a loved one\'s name';
+			return;
+		}
+
+		creatingMemorial = true;
+		error = '';
+
+		try {
+			// Redirect to create memorial page with the name pre-filled
+			await goto(`/create-memorial?name=${encodeURIComponent(lovedOneName.trim())}`);
+		} catch (err: any) {
+			error = 'Failed to create memorial. Please try again.';
+			creatingMemorial = false;
+		}
 	}
 
 	function formatDate(dateStr: string | null): string {
@@ -80,11 +104,120 @@
 				<div class="spinner"></div>
 				<p>Loading your schedule...</p>
 			</div>
+		{:else if showCreateMemorialPrompt}
+			<!-- Memorial Creation Prompt for Viewers - Law of Proximity & Von Restorff Effect -->
+			<div class="max-w-2xl mx-auto p-6">
+				<div class="card p-8 text-center">
+					<div class="mb-6">
+						<div class="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+							<svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+							</svg>
+						</div>
+						<h1 class="h1 mb-4">Create Your First Memorial</h1>
+						<p class="text-lg text-secondary mb-8">
+							To access livestream scheduling, you'll need to create a memorial first.
+							This will upgrade your account to Owner status.
+						</p>
+					</div>
+
+					{#if error}
+						<aside class="alert variant-filled-error mb-6">
+							<div class="alert-message">
+								<h3 class="h3">Error</h3>
+								<p>{error}</p>
+							</div>
+						</aside>
+					{/if}
+
+					<!-- Miller's Rule - Simple form with minimal fields -->
+					<form on:submit|preventDefault={handleCreateMemorial} class="space-y-6">
+						<div>
+							<label for="lovedOneName" class="label">
+								<span class="text-lg font-medium">Loved One's Name</span>
+							</label>
+							<input
+								id="lovedOneName"
+								type="text"
+								bind:value={lovedOneName}
+								class="input text-lg"
+								placeholder="Enter their full name"
+								required
+								disabled={creatingMemorial}
+							/>
+						</div>
+
+						<!-- Fitts's Law - Large, prominent action buttons -->
+						<div class="flex flex-col sm:flex-row gap-4 justify-center">
+							<button
+								type="submit"
+								disabled={creatingMemorial}
+								class="btn variant-filled-primary text-lg px-8 py-3"
+							>
+								{#if creatingMemorial}
+									<span class="animate-pulse">Creating Memorial...</span>
+								{:else}
+									Create Memorial & Continue
+								{/if}
+							</button>
+							<a href="/" class="btn variant-ghost-surface text-lg px-8 py-3">
+								Maybe Later
+							</a>
+						</div>
+					</form>
+
+					<!-- Law of Common Region - Benefits section -->
+					<div class="mt-12 pt-8 border-t border-surface-300">
+						<h3 class="h3 mb-6">What You'll Get as a Memorial Owner</h3>
+						<div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+							<div class="flex items-start space-x-3">
+								<div class="w-8 h-8 bg-success-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+									<svg class="w-4 h-4 text-success-600" fill="currentColor" viewBox="0 0 20 20">
+										<path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+									</svg>
+								</div>
+								<div>
+									<h4 class="font-semibold mb-1">Livestream Scheduling</h4>
+									<p class="text-sm text-secondary">Schedule and manage memorial service livestreams</p>
+								</div>
+							</div>
+							<div class="flex items-start space-x-3">
+								<div class="w-8 h-8 bg-success-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+									<svg class="w-4 h-4 text-success-600" fill="currentColor" viewBox="0 0 20 20">
+										<path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+									</svg>
+								</div>
+								<div>
+									<h4 class="font-semibold mb-1">Custom Memorial Page</h4>
+									<p class="text-sm text-secondary">Beautiful, personalized memorial website</p>
+								</div>
+							</div>
+							<div class="flex items-start space-x-3">
+								<div class="w-8 h-8 bg-success-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+									<svg class="w-4 h-4 text-success-600" fill="currentColor" viewBox="0 0 20 20">
+										<path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+									</svg>
+								</div>
+								<div>
+									<h4 class="font-semibold mb-1">Full Control</h4>
+									<p class="text-sm text-secondary">Manage all aspects of the memorial</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		{:else if error}
-			<div class="error-container">
-				<h2>Access Error</h2>
-				<p>{error}</p>
-				<a href="/" class="btn btn-primary">Return Home</a>
+			<div class="max-w-md mx-auto p-6">
+				<aside class="alert variant-filled-error">
+					<div class="alert-message">
+						<h3 class="h3">Error</h3>
+						<p>{error}</p>
+					</div>
+				</aside>
+				<div class="text-center mt-6">
+					<a href="/" class="btn variant-filled-primary">Return Home</a>
+				</div>
 			</div>
 		{:else if memorial}
 			<div class="schedule-content">
@@ -106,7 +239,7 @@
 							</p>
 							<p class="created-date">
 								<strong>Created:</strong> 
-								{memorial.createdAt?.toDate ? memorial.createdAt.toDate().toLocaleDateString() : new Date(memorial.createdAt).toLocaleDateString()}
+								{typeof memorial.createdAt === 'object' && 'toDate' in memorial.createdAt ? memorial.createdAt.toDate().toLocaleDateString() : new Date(memorial.createdAt).toLocaleDateString()}
 							</p>
 							<p class="creator-info">
 								<strong>Creator:</strong> {memorial.creatorName} ({memorial.creatorEmail})
@@ -280,329 +413,3 @@
 	</div>
 </div>
 
-<style>
-	.schedule-container {
-		min-height: calc(100vh - 80px);
-		background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-		padding: 2rem 0;
-	}
-
-	.container {
-		max-width: 1000px;
-		margin: 0 auto;
-		padding: 0 1rem;
-	}
-
-	.loading-container, .error-container {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		min-height: 400px;
-		text-align: center;
-	}
-
-	.spinner {
-		width: 40px;
-		height: 40px;
-		border: 4px solid #e5e7eb;
-		border-top: 4px solid #667eea;
-		border-radius: 50%;
-		animation: spin 1s linear infinite;
-		margin-bottom: 1rem;
-	}
-
-	@keyframes spin {
-		0% { transform: rotate(0deg); }
-		100% { transform: rotate(360deg); }
-	}
-
-	.schedule-content {
-		background: white;
-		border-radius: 1rem;
-		box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-		overflow: hidden;
-	}
-
-	.schedule-header {
-		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-		color: white;
-		padding: 3rem 2rem;
-		text-align: center;
-	}
-
-	.schedule-header h1 {
-		margin: 0 0 0.5rem 0;
-		font-size: 2.5rem;
-		font-weight: 700;
-	}
-
-	.subtitle {
-		margin: 0;
-		opacity: 0.9;
-		font-size: 1.125rem;
-	}
-
-	.memorial-overview {
-		padding: 2rem;
-		border-bottom: 1px solid #e5e7eb;
-	}
-
-	.memorial-overview h2 {
-		margin: 0 0 1.5rem 0;
-		color: #374151;
-		font-size: 1.5rem;
-	}
-
-	.memorial-card {
-		background: #f9fafb;
-		border: 1px solid #e5e7eb;
-		border-radius: 0.75rem;
-		padding: 1.5rem;
-	}
-
-	.memorial-details h3 {
-		margin: 0 0 1rem 0;
-		color: #111827;
-		font-size: 1.25rem;
-		font-weight: 600;
-	}
-
-	.memorial-details p {
-		margin: 0.5rem 0;
-		color: #6b7280;
-		line-height: 1.5;
-	}
-
-	.url-link {
-		color: #667eea;
-		text-decoration: none;
-		font-weight: 500;
-	}
-
-	.url-link:hover {
-		text-decoration: underline;
-	}
-
-	.schedule-section {
-		padding: 2rem;
-	}
-
-	.section-header {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		margin-bottom: 2rem;
-	}
-
-	.section-header h2 {
-		margin: 0;
-		color: #374151;
-		font-size: 1.5rem;
-	}
-
-	.schedule-placeholder {
-		background: #f9fafb;
-		border: 2px dashed #d1d5db;
-		border-radius: 1rem;
-		padding: 3rem 2rem;
-		text-align: center;
-	}
-
-	.placeholder-content {
-		max-width: 400px;
-		margin: 0 auto;
-	}
-
-	.calendar-icon {
-		font-size: 3rem;
-		margin-bottom: 1rem;
-	}
-
-	.placeholder-content h3 {
-		margin: 0 0 1rem 0;
-		color: #374151;
-		font-size: 1.25rem;
-	}
-
-	.placeholder-content p {
-		margin: 0 0 2rem 0;
-		color: #6b7280;
-		line-height: 1.6;
-	}
-
-	.btn {
-		padding: 0.75rem 1.5rem;
-		border: none;
-		border-radius: 0.5rem;
-		font-weight: 500;
-		cursor: pointer;
-		transition: all 0.2s ease;
-		text-decoration: none;
-		display: inline-block;
-		font-size: 0.875rem;
-	}
-
-	.btn-primary {
-		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-		color: white;
-	}
-
-	.btn-primary:hover {
-		transform: translateY(-2px);
-		box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-	}
-
-	.btn-secondary {
-		background: white;
-		color: #667eea;
-		border: 2px solid #667eea;
-	}
-
-	.btn-secondary:hover {
-		background: #667eea;
-		color: white;
-		transform: translateY(-2px);
-	}
-
-	.schedule-details {
-		display: flex;
-		flex-direction: column;
-		gap: 1.5rem;
-	}
-
-	.service-card {
-		background: white;
-		border: 1px solid #e5e7eb;
-		border-radius: 0.75rem;
-		padding: 1.5rem;
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-	}
-
-	.service-card h3 {
-		margin: 0 0 1rem 0;
-		color: #374151;
-		font-size: 1.125rem;
-		font-weight: 600;
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-	}
-
-	.service-info {
-		display: flex;
-		flex-direction: column;
-		gap: 0.75rem;
-	}
-
-	.info-row {
-		display: flex;
-		justify-content: space-between;
-		align-items: flex-start;
-		padding: 0.5rem 0;
-		border-bottom: 1px solid #f3f4f6;
-	}
-
-	.info-row:last-child {
-		border-bottom: none;
-	}
-
-	.info-row strong {
-		color: #374151;
-		font-weight: 500;
-		min-width: 120px;
-		flex-shrink: 0;
-	}
-
-	.info-row .value {
-		color: #6b7280;
-		text-align: right;
-		flex: 1;
-	}
-
-	.addon-item {
-		padding: 0.5rem 0;
-		color: #059669;
-		font-weight: 500;
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-	}
-
-	.payment-status-card {
-		background: white;
-		border: 1px solid #e5e7eb;
-		border-radius: 0.75rem;
-		padding: 1.5rem;
-		margin-top: 1rem;
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-	}
-
-	.payment-info {
-		display: flex;
-		flex-direction: column;
-		gap: 1rem;
-	}
-
-	.status-row, .amount-row {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-	}
-
-	.status-label, .amount-label {
-		font-weight: 500;
-		color: #374151;
-	}
-
-	.status-badge {
-		padding: 0.5rem 1rem;
-		border-radius: 9999px;
-		font-size: 0.875rem;
-		font-weight: 500;
-		text-transform: uppercase;
-		letter-spacing: 0.05em;
-	}
-
-	.status-badge.not-paid {
-		background: #fef2f2;
-		color: #dc2626;
-		border: 1px solid #fecaca;
-	}
-
-	.status-badge.paid {
-		background: #f0fdf4;
-		color: #059669;
-		border: 1px solid #bbf7d0;
-	}
-
-	.amount-value {
-		font-size: 1.125rem;
-		font-weight: 600;
-		color: #374151;
-	}
-
-	@media (max-width: 768px) {
-		.schedule-header {
-			padding: 2rem 1rem;
-		}
-
-		.schedule-header h1 {
-			font-size: 2rem;
-		}
-
-		.memorial-overview, .schedule-section {
-			padding: 1.5rem;
-		}
-
-		.section-header {
-			flex-direction: column;
-			gap: 1rem;
-			align-items: stretch;
-		}
-
-		.schedule-placeholder {
-			padding: 2rem 1rem;
-		}
-	}
-</style>

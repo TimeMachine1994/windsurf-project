@@ -1,237 +1,145 @@
-<!-- Hero Section -->
-<section class="hero">
-	<div class="container">
-		<div class="hero-content">
-			<h1 class="hero-title">Honoring a Life, Connecting a World.</h1>
-			<p class="hero-subtitle">
-				When distance separates us, Tributestream brings family and friends together to honor a loved one with a high-quality, professional memorial livestream.
+<!-- Hero Section - Law of Proximity & Von Restorff Effect -->
+<section class="bg-gradient-to-br from-primary-500 to-secondary-500 text-white py-20 px-4">
+	<div class="max-w-6xl mx-auto text-center">
+		<div class="max-w-4xl mx-auto space-y-8">
+			<h1 class="text-4xl md:text-6xl font-bold leading-tight mb-6">
+				Honoring a Life, <span class="text-primary-200">Connecting a World</span>
+			</h1>
+			<p class="text-xl md:text-2xl text-primary-100 leading-relaxed max-w-3xl mx-auto">
+				When distance separates us, Tributestream brings family and friends together to honor a loved one with professional memorial livestreaming.
 			</p>
-			<div class="hero-buttons">
-				<a href="/packages" class="btn btn-primary">View Packages</a>
-				<a href="/for-families" class="btn btn-secondary">Learn More</a>
+			<!-- Fitts's Law - Larger, easier to target buttons -->
+			<div class="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+				<a href="/packages" 
+					class="bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-200 hover:scale-105 shadow-lg hover:shadow-xl">
+					View Packages
+				</a>
+				<a href="/for-families" 
+					class="border-2 border-white text-white hover:bg-white hover:text-primary-600 px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-200">
+					Learn More
+				</a>
 			</div>
 		</div>
 	</div>
 </section>
 
-<!-- Main Content -->
-<section class="main-content">
-	<div class="container">
-		<div class="content-grid">
-			<div class="content-text">
-				<p class="lead-text">
-					In today's connected world, a loved one's reach extends far beyond a single location. But when friends and family can't be there in person, they still deserve to be part of the service. Tributestream provides a seamless, respectful, and professional livestreaming service that bridges the gap, allowing everyone to participate in a meaningful celebration of life.
+<!-- Trust Indicators - Jakob's Law (familiar pattern) -->
+<section class="bg-surface-50 dark:bg-surface-900 py-12 px-4">
+	<div class="max-w-6xl mx-auto">
+		<div class="grid md:grid-cols-2 gap-12 items-center">
+			<div class="space-y-6">
+				<h2 class="text-3xl font-bold text-surface-900 dark:text-surface-100">
+					Professional Memorial Livestreaming
+				</h2>
+				<p class="text-lg text-surface-700 dark:text-surface-300 leading-relaxed">
+					In today's connected world, a loved one's reach extends far beyond a single location. When friends and family can't be there in person, they still deserve to be part of the service.
 				</p>
-				
-				<p>
-					We partner with funeral homes to offer a service that is both convenient and deeply valuable. Our team of compassionate professionals handles all the technology, ensuring a flawless production so that families can focus on what matters most—remembering their loved one.
+				<p class="text-surface-600 dark:text-surface-400">
+					We partner with funeral homes to offer a service that is both convenient and deeply valuable. Our compassionate professionals handle all the technology, ensuring a flawless production.
+				</p>
+			</div>
+			<div class="bg-white dark:bg-surface-800 p-8 rounded-xl shadow-lg">
+				<div class="space-y-4">
+					<div class="flex items-center space-x-3">
+						<div class="w-3 h-3 bg-green-500 rounded-full"></div>
+						<span class="text-surface-700 dark:text-surface-300">Professional equipment & team</span>
+					</div>
+					<div class="flex items-center space-x-3">
+						<div class="w-3 h-3 bg-green-500 rounded-full"></div>
+						<span class="text-surface-700 dark:text-surface-300">Reliable, stable streaming</span>
+					</div>
+					<div class="flex items-center space-x-3">
+						<div class="w-3 h-3 bg-green-500 rounded-full"></div>
+						<span class="text-surface-700 dark:text-surface-300">Digital keepsakes included</span>
+					</div>
+					<div class="flex items-center space-x-3">
+						<div class="w-3 h-3 bg-green-500 rounded-full"></div>
+						<span class="text-surface-700 dark:text-surface-300">Respectful, dignified service</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- Features Section - Miller's Rule (4 key features) & Law of Common Region -->
+<section class="py-20 px-4 bg-white dark:bg-surface-950">
+	<div class="max-w-6xl mx-auto">
+		<div class="text-center mb-16">
+			<h2 class="text-4xl font-bold text-surface-900 dark:text-surface-100 mb-4">
+				What We Offer
+			</h2>
+			<p class="text-xl text-surface-600 dark:text-surface-400 max-w-2xl mx-auto">
+				Everything you need for a meaningful, professional memorial service
+			</p>
+		</div>
+		
+		<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+			<div class="bg-surface-50 dark:bg-surface-900 p-8 rounded-xl text-center hover:shadow-lg transition-shadow duration-200 border border-surface-200 dark:border-surface-700">
+				<div class="text-5xl mb-4">🎥</div>
+				<h3 class="text-xl font-semibold text-surface-900 dark:text-surface-100 mb-3">
+					Professional Videography
+				</h3>
+				<p class="text-surface-600 dark:text-surface-400">
+					Cutting-edge technology for high-quality, cinematic video and sound
+				</p>
+			</div>
+			
+			<div class="bg-surface-50 dark:bg-surface-900 p-8 rounded-xl text-center hover:shadow-lg transition-shadow duration-200 border border-surface-200 dark:border-surface-700">
+				<div class="text-5xl mb-4">📡</div>
+				<h3 class="text-xl font-semibold text-surface-900 dark:text-surface-100 mb-3">
+					Flawless Livestreaming
+				</h3>
+				<p class="text-surface-600 dark:text-surface-400">
+					Stable, reliable streaming with no technical issues or interruptions
+				</p>
+			</div>
+			
+			<div class="bg-surface-50 dark:bg-surface-900 p-8 rounded-xl text-center hover:shadow-lg transition-shadow duration-200 border border-surface-200 dark:border-surface-700">
+				<div class="text-5xl mb-4">💾</div>
+				<h3 class="text-xl font-semibold text-surface-900 dark:text-surface-100 mb-3">
+					Digital Keepsakes
+				</h3>
+				<p class="text-surface-600 dark:text-surface-400">
+					Preserved memories on custom USB drives for generations to cherish
+				</p>
+			</div>
+			
+			<div class="bg-surface-50 dark:bg-surface-900 p-8 rounded-xl text-center hover:shadow-lg transition-shadow duration-200 border border-surface-200 dark:border-surface-700">
+				<div class="text-5xl mb-4">🤝</div>
+				<h3 class="text-xl font-semibold text-surface-900 dark:text-surface-100 mb-3">
+					Respectful Service
+				</h3>
+				<p class="text-surface-600 dark:text-surface-400">
+					Specialized in memorials with dignity and care in every detail
 				</p>
 			</div>
 		</div>
 	</div>
 </section>
 
-<!-- Features Section -->
-<section class="features">
-	<div class="container">
-		<h2 class="section-title">What We Offer</h2>
-		<div class="features-grid">
-			<div class="feature-card">
-				<div class="feature-icon">🎥</div>
-				<h3>Professional Videography</h3>
-				<p>Our team uses cutting-edge technology to capture high-quality, cinematic video and sound.</p>
-			</div>
-			
-			<div class="feature-card">
-				<div class="feature-icon">📡</div>
-				<h3>Flawless Livestreaming</h3>
-				<p>We eliminate the risk of technical issues, providing a stable, reliable stream for all attendees.</p>
-			</div>
-			
-			<div class="feature-card">
-				<div class="feature-icon">💾</div>
-				<h3>Digital Keepsakes</h3>
-				<p>Every service is preserved and can be downloaded or delivered on a custom USB drive, so the memories can be cherished for generations.</p>
-			</div>
-			
-			<div class="feature-card">
-				<div class="feature-icon">🤝</div>
-				<h3>A Focus on Respect</h3>
-				<p>We specialize exclusively in memorials and celebrations of life, ensuring every detail is handled with the dignity and care it deserves.</p>
+<!-- CTA Section - Von Restorff Effect (stands out) -->
+<section class="bg-primary-500 text-white py-16 px-4">
+	<div class="max-w-4xl mx-auto text-center">
+		<div class="space-y-8">
+			<h2 class="text-3xl md:text-4xl font-bold">
+				Ready to Honor Your Loved One?
+			</h2>
+			<p class="text-xl text-primary-100 max-w-2xl mx-auto">
+				Contact us today to learn more about our professional memorial livestreaming services
+			</p>
+			<!-- Hick's Law - Simplified to 2 clear choices -->
+			<div class="flex flex-col sm:flex-row gap-4 justify-center">
+				<a href="/contact" 
+					class="bg-white text-primary-600 hover:bg-primary-50 px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-200 hover:scale-105 shadow-lg">
+					Get Started Today
+				</a>
+				<a href="/for-funeral-homes" 
+					class="border-2 border-white text-white hover:bg-white hover:text-primary-600 px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-200">
+					For Funeral Homes
+				</a>
 			</div>
 		</div>
 	</div>
 </section>
 
-<!-- CTA Section -->
-<section class="cta-section">
-	<div class="container">
-		<div class="cta-content">
-			<h2>Ready to Honor Your Loved One?</h2>
-			<p>Contact us today to learn more about our professional memorial livestreaming services.</p>
-			<div class="cta-buttons">
-				<a href="/contact" class="btn btn-primary">Get Started</a>
-				<a href="/for-funeral-homes" class="btn btn-outline">For Funeral Homes</a>
-			</div>
-		</div>
-	</div>
-</section>
-
-<style>
-	.hero {
-		background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
-		color: white;
-		padding: 4rem 0 6rem;
-		text-align: center;
-	}
-
-	.container {
-		max-width: 1200px;
-		margin: 0 auto;
-		padding: 0 1rem;
-	}
-
-	.hero-content {
-		max-width: 800px;
-		margin: 0 auto;
-	}
-
-	.hero h1 {
-		font-size: 3rem;
-		font-weight: 700;
-		margin-bottom: 1.5rem;
-		color: var(--color-background);
-		text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-	}
-
-	.hero p {
-		font-size: 1.25rem;
-		margin-bottom: 2rem;
-		color: var(--color-background);
-		opacity: 0.9;
-		max-width: 600px;
-	}
-
-	.hero-buttons {
-		display: flex;
-		gap: 1rem;
-		justify-content: center;
-		flex-wrap: wrap;
-	}
-
-	.main-content {
-		padding: 4rem 0;
-		background: var(--color-background);
-	}
-
-	.content-text {
-		max-width: 800px;
-		margin: 0 auto;
-	}
-
-	.lead-text {
-		font-size: 1.125rem;
-		line-height: 1.7;
-		margin-bottom: 1.5rem;
-		color: var(--color-text);
-	}
-
-	.features {
-		padding: 4rem 0;
-		background: var(--color-surface);
-	}
-
-	.section-title {
-		text-align: center;
-		font-size: 2.5rem;
-		margin-bottom: 3rem;
-		color: var(--color-text);
-	}
-
-	.features-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-		gap: 2rem;
-		margin-top: 2rem;
-	}
-
-	.feature-card {
-		background: var(--color-background);
-		padding: 2rem;
-		border-radius: 1rem;
-		text-align: center;
-		box-shadow: var(--shadow-md);
-		transition: transform 0.2s ease, box-shadow 0.2s ease;
-	}
-
-	.feature-card:hover {
-		transform: translateY(-4px);
-		box-shadow: var(--shadow-lg);
-	}
-
-	.feature-icon {
-		font-size: 3rem;
-		margin-bottom: 1rem;
-	}
-
-	.feature-card h3 {
-		color: var(--color-text);
-		margin-bottom: 1rem;
-		font-size: 1.25rem;
-	}
-
-	.feature-card p {
-		color: var(--color-text-secondary);
-		line-height: 1.6;
-	}
-
-	.cta-section {
-		padding: 4rem 0;
-		background: var(--color-background);
-		text-align: center;
-	}
-
-	.cta-content {
-		max-width: 600px;
-		margin: 0 auto;
-	}
-
-	.cta-content h2 {
-		font-size: 2rem;
-		margin-bottom: 1rem;
-		color: var(--color-text);
-	}
-
-	.cta-content p {
-		font-size: 1.125rem;
-		margin-bottom: 2rem;
-		color: var(--color-text-secondary);
-	}
-
-	.cta-buttons {
-		display: flex;
-		gap: 1rem;
-		justify-content: center;
-		flex-wrap: wrap;
-	}
-
-	@media (max-width: 768px) {
-		.hero-title {
-			font-size: 2rem;
-		}
-		
-		.hero-subtitle {
-			font-size: 1.125rem;
-		}
-		
-		.hero-buttons,
-		.cta-buttons {
-			flex-direction: column;
-			align-items: center;
-		}
-		
-		.features-grid {
-			grid-template-columns: 1fr;
-		}
-	}
-</style>

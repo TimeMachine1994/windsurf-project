@@ -39,13 +39,15 @@ export async function isUrlAvailable(customUrl: string): Promise<boolean> {
     console.error('❌ Error checking URL availability:', error);
     console.error('Error details:', { customUrl, errorMessage: error.message, errorCode: error.code });
     
-    // If we get a permission denied error, assume URL is available since we can't check
+    // If we get a permission denied error, generate a random suffix to ensure uniqueness
     // This happens when Firestore rules block unauthenticated reads
     if (error.code === 'permission-denied') {
-      console.log('⚠️ Permission denied - assuming URL is available for:', customUrl);
-      return true;
+      console.log('⚠️ Permission denied - will add random suffix to ensure uniqueness:', customUrl);
+      return false; // Force adding a random suffix
     }
     
+    // For other errors, assume URL might be taken to be safe
+    console.log('⚠️ Unknown error - assuming URL might be taken for safety:', customUrl);
     return false;
   }
 }
@@ -68,14 +70,22 @@ export async function createMemorialAndUser(data: MemorialCreationData): Promise
     let customUrl = generateMemorialSlug(data.lovedOneName);
     console.log('📝 Initial custom URL generated:', customUrl);
     
-    // Ensure URL is unique by adding number if needed
+    // Ensure URL is unique by adding number or random suffix if needed
     let counter = 1;
     let baseUrl = customUrl;
     console.log('🔍 Checking URL uniqueness...');
     while (!(await isUrlAvailable(customUrl))) {
-      console.log('⚠️ URL already exists, trying variant:', `${baseUrl}-${counter}`);
-      customUrl = `${baseUrl}-${counter}`;
-      counter++;
+      if (counter <= 3) {
+        console.log('⚠️ URL already exists, trying variant:', `${baseUrl}-${counter}`);
+        customUrl = `${baseUrl}-${counter}`;
+        counter++;
+      } else {
+        // After 3 attempts, add random suffix to ensure uniqueness
+        const randomSuffix = Math.random().toString(36).substring(2, 8);
+        customUrl = `${baseUrl}-${randomSuffix}`;
+        console.log('⚠️ Adding random suffix for uniqueness:', customUrl);
+        break; // Exit loop since random suffix should be unique
+      }
     }
     console.log('✅ Final unique URL confirmed:', customUrl);
     

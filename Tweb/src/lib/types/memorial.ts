@@ -6,7 +6,10 @@ export interface Memorial {
 	biography?: string;
 	photoUrl?: string;
 	creatorUid: string;
-	createdAt: Date;
-	updatedAt: Date;
+	creatorName?: string;
+	creatorEmail?: string;
+	customUrl?: string;
+	createdAt: Date | { toDate(): Date };
+	updatedAt: Date | { toDate(): Date };
 	isPublic: boolean;
 }

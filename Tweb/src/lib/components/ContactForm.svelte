@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { InputChip } from '@skeletonlabs/skeleton';
 	
 	let name = '';
 	let email = '';
@@ -81,27 +82,23 @@
 			Have questions about our memorial services? We're here to help you create a lasting tribute.
 		</p>
 
-		<!-- Status Messages -->
+			<!-- Status Messages -->
 		{#if submitStatus === 'success'}
-			<div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-				<div class="flex items-center">
-					<svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-						<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-					</svg>
-					<p class="text-green-800 font-medium">{successMessage}</p>
+			<aside class="alert variant-filled-success mb-6">
+				<div class="alert-message">
+					<h3 class="h3">Success!</h3>
+					<p>{successMessage}</p>
 				</div>
-			</div>
+			</aside>
 		{/if}
 
 		{#if submitStatus === 'error'}
-			<div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-				<div class="flex items-center">
-					<svg class="w-5 h-5 text-red-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-						<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-					</svg>
-					<p class="text-red-800 font-medium">{errorMessage}</p>
+			<aside class="alert variant-filled-error mb-6">
+				<div class="alert-message">
+					<h3 class="h3">Error</h3>
+					<p>{errorMessage}</p>
 				</div>
-			</div>
+			</aside>
 		{/if}
 
 		<form on:submit|preventDefault={handleSubmit} class="space-y-6">
@@ -116,7 +113,7 @@
 						id="name"
 						bind:value={name}
 						required
-						class="form-input"
+						class="input"
 						placeholder="Your full name"
 						disabled={isSubmitting}
 					/>
@@ -131,7 +128,7 @@
 						id="email"
 						bind:value={email}
 						required
-						class="form-input"
+						class="input"
 						placeholder="your@email.com"
 						disabled={isSubmitting}
 					/>
@@ -148,7 +145,7 @@
 					id="subject"
 					bind:value={subject}
 					required
-					class="form-input"
+					class="input"
 					placeholder="How can we help you?"
 					disabled={isSubmitting}
 				/>
@@ -164,7 +161,7 @@
 					bind:value={message}
 					required
 					rows="6"
-					class="form-input resize-y"
+					class="textarea resize-y"
 					placeholder="Tell us about your needs, questions, or how we can assist you..."
 					disabled={isSubmitting}
 				></textarea>
@@ -175,7 +172,7 @@
 				<button
 					type="submit"
 					disabled={isSubmitting}
-					class="btn btn-primary w-full"
+					class="btn variant-filled-primary w-full"
 				>
 					{#if isSubmitting}
 						<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -211,21 +208,3 @@
 	</div>
 </div>
 
-<style>
-	/* Custom focus styles for better accessibility */
-	input:focus,
-	textarea:focus {
-		outline: none;
-		box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-	}
-	
-	/* Smooth transitions */
-	button {
-		transition: all 0.2s ease-in-out;
-	}
-	
-	button:hover:not(:disabled) {
-		transform: translateY(-1px);
-		box-shadow: var(--shadow-primary);
-	}
-</style>

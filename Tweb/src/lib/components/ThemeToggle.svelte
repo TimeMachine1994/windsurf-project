@@ -16,64 +16,17 @@
 
 {#if mounted}
 	<button 
-		class="theme-toggle"
+		class="flex items-center gap-2 rounded-full md:px-4 md:py-2 px-2 py-2 bg-primary-500/20 hover:bg-primary-500/30 text-primary-700 dark:text-primary-300 border border-primary-500/30 hover:border-primary-500/50 transition-all duration-200"
 		on:click={toggleTheme}
 		aria-label="Toggle theme"
 		title="Toggle light/dark mode"
 	>
 		{#if $theme === 'light'}
-			<span class="icon">🌙</span>
-			<span class="text">Dark</span>
+			<span class="text-base">🌙</span>
+			<span class="hidden md:inline font-medium">Dark</span>
 		{:else}
-			<span class="icon">☀️</span>
-			<span class="text">Light</span>
+			<span class="text-base">☀️</span>
+			<span class="hidden md:inline font-medium">Light</span>
 		{/if}
 	</button>
 {/if}
-
-<style>
-	.theme-toggle {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-		padding: 0.5rem 1rem;
-		border: 2px solid var(--color-primary);
-		border-radius: 2rem;
-		background: var(--color-background);
-		color: var(--color-primary);
-		cursor: pointer;
-		transition: all 0.2s ease;
-		font-weight: 500;
-		font-size: 0.875rem;
-	}
-
-	.theme-toggle:hover {
-		background: var(--color-primary);
-		color: var(--color-background);
-		transform: translateY(-1px);
-		box-shadow: 0 4px 12px var(--color-primary-alpha);
-	}
-
-	.icon {
-		font-size: 1rem;
-		line-height: 1;
-	}
-
-	.text {
-		font-weight: 500;
-	}
-
-	@media (max-width: 768px) {
-		.text {
-			display: none;
-		}
-		
-		.theme-toggle {
-			padding: 0.5rem;
-			border-radius: 50%;
-			width: 2.5rem;
-			height: 2.5rem;
-			justify-content: center;
-		}
-	}
-</style>

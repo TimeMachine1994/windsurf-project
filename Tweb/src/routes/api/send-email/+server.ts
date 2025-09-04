@@ -84,9 +84,10 @@ The Memorial Team
     console.log(' [SERVER] Email data prepared:', { to: emailData.to, subject: emailData.subject });
 
     if (!SENDGRID_API_KEY) {
-      console.log(' [SERVER] SendGrid not configured. Email would be sent to:', emailData.to);
-      console.log(' [SERVER] Email content preview:', { subject: emailData.subject, to: emailData.to });
-      return json({ success: true, message: 'Email logged (SendGrid not configured)' });
+      console.log('📧 [SERVER] SendGrid not configured. Email would be sent to:', emailData.to);
+      console.log('📧 [SERVER] Email content preview:', { subject: emailData.subject, to: emailData.to });
+      console.log('📧 [SERVER] Password for user:', password);
+      return json({ success: true, message: 'Email logged (SendGrid not configured)', password: password });
     }
     
     console.log(' [SERVER] SendGrid configured, preparing to send email...');
@@ -110,7 +111,7 @@ The Memorial Team
     return json({ success: true, message: 'Email sent successfully' });
   } catch (error) {
     console.error(' [SERVER] Error in email API:', error);
-    console.error(' [SERVER] Email error details:', { errorMessage: error.message, errorCode: error.code, stack: error.stack });
+    console.error(' [SERVER] Email error details:', { errorMessage: (error as any)?.message, errorCode: (error as any)?.code, stack: (error as any)?.stack });
     return json({ error: 'Failed to send email' }, { status: 500 });
   }
 };

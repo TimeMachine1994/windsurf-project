@@ -32,9 +32,9 @@ export async function sendPasswordEmail(
 
     const result = await response.json();
     console.log('✅ Email API success:', result.message);
-  } catch (error) {
+  } catch (error: any) {
     console.error('❌ Error in sendPasswordEmail:', error);
-    console.error('Email error details:', { email, errorMessage: error.message });
+    console.error('Email error details:', { email, errorMessage: error?.message });
     throw new Error('Failed to send email');
   }
 }

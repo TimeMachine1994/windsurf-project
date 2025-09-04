@@ -68,189 +68,79 @@
 	<title>Book Livestream Services - TributeStream</title>
 </svelte:head>
 
-<div class="booking-container">
-	{#if loading}
-		<div class="loading-container">
-			<div class="spinner"></div>
-			<p>Loading booking information...</p>
+{#if loading}
+	<!-- Loading State - Law of Feedback -->
+	<section class="bg-surface-50 dark:bg-surface-900 py-24 px-4">
+		<div class="max-w-4xl mx-auto text-center">
+			<div class="animate-spin w-12 h-12 border-4 border-primary-500 border-t-transparent rounded-full mx-auto mb-6"></div>
+			<p class="text-lg text-surface-600 dark:text-surface-400">Loading booking information...</p>
 		</div>
-	{:else if error}
-		<div class="error-container">
-			<div class="error-content">
-				<h2>Access Required</h2>
-				<p>{error}</p>
+	</section>
+{:else if error}
+	<!-- Error State - Von Restorff Effect -->
+	<section class="bg-surface-50 dark:bg-surface-900 py-24 px-4">
+		<div class="max-w-2xl mx-auto text-center">
+			<div class="bg-white dark:bg-surface-950 p-8 rounded-xl shadow-lg border border-surface-200 dark:border-surface-700">
+				<h2 class="text-3xl font-bold text-surface-900 dark:text-surface-100 mb-4">
+					Access Required
+				</h2>
+				<p class="text-lg text-surface-600 dark:text-surface-400 mb-8">{error}</p>
 				{#if !$authStore.user}
-					<div class="auth-actions">
-						<a href="/login" class="btn btn-primary">Sign In</a>
-						<a href="/register" class="btn btn-secondary">Create Account</a>
+					<div class="flex flex-col sm:flex-row gap-4 justify-center">
+						<a href="/login" 
+							class="bg-primary-600 hover:bg-primary-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors duration-200">
+							Sign In
+						</a>
+						<a href="/register" 
+							class="border-2 border-primary-500 text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-950 px-8 py-3 rounded-lg font-semibold transition-colors duration-200">
+							Create Account
+						</a>
 					</div>
 				{:else}
-					<a href="/" class="btn btn-primary">Return Home</a>
+					<a href="/" 
+						class="bg-primary-600 hover:bg-primary-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors duration-200 inline-block">
+						Return Home
+					</a>
 				{/if}
 			</div>
 		</div>
-	{:else}
-		<div class="booking-header">
-			<div class="container">
-				<h1>Book Livestream Services</h1>
+	</section>
+{:else}
+	<!-- Hero Section - Law of Proximity -->
+	<section class="bg-gradient-to-br from-primary-500 to-secondary-500 text-white py-24 px-4">
+		<div class="max-w-4xl mx-auto text-center">
+			<div class="space-y-6">
+				<h1 class="text-4xl md:text-5xl font-bold leading-tight">
+					Book Livestream Services
+				</h1>
 				{#if memorial}
-					<p class="subtitle">Configure livestream services for {memorial.lovedOneName}</p>
+					<p class="text-xl text-primary-100 leading-relaxed">
+						Configure livestream services for <span class="font-semibold">{memorial.lovedOneName}</span>
+					</p>
 				{:else}
-					<p class="subtitle">Professional livestream services for memorial celebrations</p>
+					<p class="text-xl text-primary-100 leading-relaxed">
+						Professional livestream services for memorial celebrations
+					</p>
 				{/if}
 			</div>
 		</div>
-		
-		<div class="calculator-wrapper">
-			<div class="container">
-				{#if memorial}
-					<Calculator 
-						memorialId={memorial.id} 
-						data={{ memorial, config }} 
-					/>
-				{:else}
-					<div class="loading-container">
-						<div class="spinner"></div>
-						<p>Loading memorial data...</p>
-					</div>
-				{/if}
-			</div>
+	</section>
+	
+	<!-- Calculator Section -->
+	<section class="py-12 px-4 bg-white dark:bg-surface-950">
+		<div class="max-w-7xl mx-auto">
+			{#if memorial}
+				<Calculator 
+					memorialId={memorial.id} 
+					data={{ memorial, config }} 
+				/>
+			{:else}
+				<div class="text-center py-12">
+					<div class="animate-spin w-8 h-8 border-4 border-primary-500 border-t-transparent rounded-full mx-auto mb-4"></div>
+					<p class="text-surface-600 dark:text-surface-400">Loading memorial data...</p>
+				</div>
+			{/if}
 		</div>
-	{/if}
-</div>
+	</section>
+{/if}
 
-<style>
-	.booking-container {
-		min-height: calc(100vh - 80px);
-		background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-	}
-
-	.loading-container, .error-container {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		min-height: 60vh;
-		padding: 2rem;
-	}
-
-	.spinner {
-		width: 40px;
-		height: 40px;
-		border: 4px solid #e5e7eb;
-		border-top: 4px solid #667eea;
-		border-radius: 50%;
-		animation: spin 1s linear infinite;
-		margin-bottom: 1rem;
-	}
-
-	@keyframes spin {
-		0% { transform: rotate(0deg); }
-		100% { transform: rotate(360deg); }
-	}
-
-	.error-content {
-		text-align: center;
-		max-width: 400px;
-	}
-
-	.error-content h2 {
-		color: #374151;
-		margin-bottom: 1rem;
-	}
-
-	.error-content p {
-		color: #6b7280;
-		margin-bottom: 2rem;
-		line-height: 1.6;
-	}
-
-	.auth-actions {
-		display: flex;
-		gap: 1rem;
-		justify-content: center;
-		flex-wrap: wrap;
-	}
-
-	.booking-header {
-		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-		color: white;
-		padding: 3rem 0;
-		text-align: center;
-	}
-
-	.container {
-		max-width: 1200px;
-		margin: 0 auto;
-		padding: 0 1rem;
-	}
-
-	.booking-header h1 {
-		margin: 0 0 0.5rem 0;
-		font-size: 2.5rem;
-		font-weight: 700;
-	}
-
-	.subtitle {
-		margin: 0;
-		opacity: 0.9;
-		font-size: 1.125rem;
-	}
-
-	.calculator-wrapper {
-		padding: 2rem 0;
-	}
-
-	.btn {
-		padding: 0.75rem 1.5rem;
-		border: none;
-		border-radius: 0.5rem;
-		font-weight: 500;
-		cursor: pointer;
-		transition: all 0.2s ease;
-		text-decoration: none;
-		display: inline-block;
-		font-size: 0.875rem;
-	}
-
-	.btn-primary {
-		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-		color: white;
-	}
-
-	.btn-primary:hover {
-		transform: translateY(-2px);
-		box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-	}
-
-	.btn-secondary {
-		background: white;
-		color: #667eea;
-		border: 2px solid #667eea;
-	}
-
-	.btn-secondary:hover {
-		background: #667eea;
-		color: white;
-		transform: translateY(-2px);
-	}
-
-	@media (max-width: 768px) {
-		.booking-header {
-			padding: 2rem 0;
-		}
-
-		.booking-header h1 {
-			font-size: 2rem;
-		}
-
-		.auth-actions {
-			flex-direction: column;
-			align-items: center;
-		}
-
-		.btn {
-			width: 200px;
-		}
-	}
-</style>
