@@ -15,7 +15,14 @@
 	let lovedOneName = '';
 
 	onMount(async () => {
-		if ($authStore.user && $authStore.profile?.role === 'Owner') {
+		if ($authStore.user && ($authStore.profile?.role === 'Owner' || $authStore.profile?.role === 'FuneralDirector')) {
+			// Check if funeral director is approved
+			if ($authStore.profile?.role === 'FuneralDirector' && !$authStore.profile?.approved) {
+				error = 'Your funeral director account is pending approval. Please wait for admin approval to access the dashboard.';
+				loading = false;
+				return;
+			}
+
 			try {
 				console.log('📅 Loading schedule for user:', $authStore.user.uid);
 				memorial = await getMemorialByCreatorUid($authStore.user.uid);
@@ -94,7 +101,7 @@
 </script>
 
 <svelte:head>
-	<title>Livestream Schedule - TributeStream</title>
+	<title>{$authStore.profile?.role === 'FuneralDirector' ? 'Dashboard' : 'Livestream Schedule'} - TributeStream</title>
 </svelte:head>
 
 <div class="schedule-container">
@@ -222,8 +229,8 @@
 		{:else if memorial}
 			<div class="schedule-content">
 				<div class="schedule-header">
-					<h1>Livestream Schedule</h1>
-					<p class="subtitle">Manage your memorial service streaming schedule</p>
+					<h1>{$authStore.profile?.role === 'FuneralDirector' ? 'Funeral Director Dashboard' : 'Livestream Schedule'}</h1>
+					<p class="subtitle">{$authStore.profile?.role === 'FuneralDirector' ? 'Manage memorial services and streaming schedules' : 'Manage your memorial service streaming schedule'}</p>
 				</div>
 
 				<div class="memorial-overview">
@@ -249,11 +256,28 @@
 				</div>
 
 				<div class="schedule-section">
-					<div class="section-header">
-						<h2>Streaming Schedule</h2>
-						<button class="btn btn-primary" on:click={handleEditSchedule}>
-							{livestreamConfig ? 'Edit Schedule' : 'Set Up Schedule'}
-						</button>
+					<div class="flex justify-between items-start mb-6">
+						<h2 class="h2">Streaming Schedule</h2>
+						{#if livestreamConfig?.paymentStatus === 'paid'}
+							<div class="text-center space-y-2">
+								<span class="badge variant-filled-warning flex items-center gap-2 mb-2">
+									<span>🔒</span>
+									<span>Schedule Locked</span>
+								</span>
+								{#if $authStore.profile?.role === 'FuneralDirector'}
+									<a href="/livestreaming" class="btn variant-filled-success">
+										<span>📹</span>
+										<span>Go Live</span>
+									</a>
+								{:else}
+									<p class="text-sm text-surface-500 dark:text-surface-400">Contact support to make changes</p>
+								{/if}
+							</div>
+						{:else}
+							<button class="btn variant-filled-primary" on:click={handleEditSchedule}>
+								{livestreamConfig ? 'Edit Schedule' : 'Set Up Schedule'}
+							</button>
+						{/if}
 					</div>
 					
 					{#if livestreamConfig && livestreamConfig.formData}
@@ -380,19 +404,45 @@
 								</div>
 							{/if}
 
-							<div class="payment-status-card">
-								<div class="payment-info">
-									<div class="status-row">
-										<span class="status-label">Payment Status:</span>
-										<span class="status-badge not-paid">Not Paid</span>
-									</div>
-									{#if livestreamConfig.total}
-										<div class="amount-row">
-											<span class="amount-label">Total Amount:</span>
-											<span class="amount-value">${livestreamConfig.total.toLocaleString()}</span>
-										</div>
-									{/if}
+							<div class="card p-6 space-y-4">
+								<div class="flex justify-between items-center">
+									<span class="text-lg font-semibold">Payment Status:</span>
+									<span class="badge {livestreamConfig.paymentStatus === 'paid' ? 'variant-filled-success' : 'variant-filled-warning'}">
+										{livestreamConfig.paymentStatus === 'paid' ? 'Paid' : 'Not Paid'}
+									</span>
 								</div>
+								{#if livestreamConfig.total}
+									<div class="flex justify-between items-center">
+										<span class="text-surface-600 dark:text-surface-400">Total Amount:</span>
+										<span class="text-xl font-bold text-primary-600 dark:text-primary-400">${livestreamConfig.total.toLocaleString()}</span>
+									</div>
+								{/if}
+								{#if livestreamConfig.paymentStatus === 'paid' && livestreamConfig.paidAt}
+									<div class="flex justify-between items-center">
+										<span class="text-surface-600 dark:text-surface-400">Paid On:</span>
+										<span class="font-medium">{new Date(livestreamConfig.paidAt).toLocaleDateString()}</span>
+									</div>
+								{/if}
+								{#if livestreamConfig.paymentStatus === 'paid'}
+									<div class="alert variant-ghost-warning mt-4">
+										<div class="alert-message">
+											<h3 class="h4 flex items-center gap-2">
+												<span>🔒</span>
+												<span>Schedule Locked</span>
+											</h3>
+											<p>Your schedule is locked after payment. Contact support to make changes.</p>
+											<div class="mt-3 space-y-1">
+												<div class="flex items-center gap-2">
+													<strong>Support:</strong> 
+													<a href="mailto:support@tributestream.com" class="anchor">support@tributestream.com</a>
+												</div>
+												<div class="text-sm text-surface-600 dark:text-surface-400">
+													Phone: (555) 123-4567
+												</div>
+											</div>
+										</div>
+									</div>
+								{/if}
 							</div>
 						</div>
 					{:else}

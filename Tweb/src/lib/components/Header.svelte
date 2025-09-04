@@ -99,13 +99,31 @@
 										</svg>
 										Profile Settings
 									</a>
+									{#if $authStore.profile?.role === 'Owner'}
+										<a href="/slideshow-manager" 
+											class="flex items-center px-4 py-3 text-sm text-surface-700 dark:text-surface-300 hover:bg-surface-50 dark:hover:bg-surface-700 transition-colors">
+											<svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+											</svg>
+											Slideshow Manager
+										</a>
+									{/if}
 									<a href="/schedule" 
 										class="flex items-center px-4 py-3 text-sm text-surface-700 dark:text-surface-300 hover:bg-surface-50 dark:hover:bg-surface-700 transition-colors">
 										<svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2z"/>
 										</svg>
-										Livestream Schedule
+										{$authStore.profile?.role === 'FuneralDirector' ? 'Dashboard' : 'Livestream Schedule'}
 									</a>
+									{#if $authStore.profile?.role === 'Admin'}
+										<a href="/admin/funeral-directors" 
+											class="flex items-center px-4 py-3 text-sm text-surface-700 dark:text-surface-300 hover:bg-surface-50 dark:hover:bg-surface-700 transition-colors">
+											<svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+											</svg>
+											Funeral Director Approvals
+										</a>
+									{/if}
 									<hr class="my-2 border-surface-200 dark:border-surface-600">
 									<button 
 										class="flex items-center w-full px-4 py-3 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
@@ -125,6 +143,10 @@
 						<a href="/login" 
 							class="text-surface-700 dark:text-surface-300 hover:text-primary-600 dark:hover:text-primary-400 px-4 py-2 text-sm font-medium transition-colors">
 							Sign In
+						</a>
+						<a href="/register" 
+							class="text-surface-700 dark:text-surface-300 hover:text-primary-600 dark:hover:text-primary-400 px-4 py-2 text-sm font-medium transition-colors">
+							Register
 						</a>
 					</div>
 				{/if}

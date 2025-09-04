@@ -58,6 +58,9 @@ export interface LivestreamConfig {
 	bookingItems: BookingItem[];
 	total: number;
 	currentStep?: 'tier' | 'details' | 'addons' | 'payment';
+	paymentStatus?: 'pending' | 'paid' | 'failed';
+	paymentIntentId?: string;
+	paidAt?: Date;
 	createdAt?: Date;
 	updatedAt?: Date;
 }

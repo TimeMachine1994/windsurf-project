@@ -16,15 +16,13 @@
       "**/.*",
       "**/node_modules/**"
     ]
-},
+  },
   "emulators": {
-
     "auth": {
       "port": 9099
     },
     "functions": {
       "port": 5001
-      
     },
     "firestore": {
       "port": 8081
@@ -33,5 +31,16 @@
       "enabled": true
     },
     "singleProjectMode": true
+  },
+  "apphosting": {
+    "backendId": "tweb2",
+    "rootDir": "Tweb",
+    "ignore": [
+      "node_modules",
+      ".git",
+      "firebase-debug.log",
+      "firebase-debug.*.log",
+      "functions"
+    ]
   }
 }

@@ -16,7 +16,7 @@
 	import { auth } from '$lib/firebase/config';
 	import { goto } from '$app/navigation';
 	import { saveCalculatorState, getCalculatorState, clearCalculatorState, getDefaultFormData } from '$lib/utils/calculatorState';
-	import { saveLivestreamConfig, getLivestreamConfig } from '$lib/firebase/livestream';
+	import { saveLivestreamConfig, getLivestreamConfig, updatePaymentStatus } from '$lib/firebase/livestream';
 
 	let {
 		memorialId,
@@ -50,6 +50,15 @@
 				const firestoreConfig = await getLivestreamConfig(memorialId);
 				if (firestoreConfig) {
 					console.log('🔄 Restoring calculator state from Firestore:', firestoreConfig);
+					
+					// Check if payment is already completed
+					if (firestoreConfig.paymentStatus === 'paid') {
+						console.log('💳 Payment already completed, redirecting to schedule');
+						alert('Your livestream services have already been paid for. You can view your schedule but cannot make changes. Contact support if you need to modify your booking.');
+						await goto('/schedule');
+						return;
+					}
+					
 					currentStep = firestoreConfig.currentStep || 'tier';
 					formData = firestoreConfig.formData;
 					selectedTier = firestoreConfig.bookingItems.find(
@@ -458,11 +467,28 @@
 		}
 	}
 
-	function handlePaymentSuccess(event: CustomEvent) {
+	async function handlePaymentSuccess(event: CustomEvent) {
 		console.log('🎉 Payment successful!', event.detail);
-		// Handle successful payment
-		alert('Payment successful! Thank you for your purchase.');
-		// You could redirect to a success page or update the UI
+		const { paymentIntent } = event.detail;
+		
+		try {
+			// Update payment status in Firestore
+			const result = await updatePaymentStatus(memorialId, paymentIntent.id, 'paid');
+			
+			if (result.success) {
+				console.log('✅ Payment status updated in database');
+				// Clear calculator state since payment is complete
+				clearCalculatorState();
+				// Redirect to schedule page to show the locked configuration
+				await goto('/schedule');
+			} else {
+				console.error('❌ Failed to update payment status:', result.error);
+				alert('Payment was successful, but there was an issue updating your records. Please contact support.');
+			}
+		} catch (error) {
+			console.error('💥 Error handling payment success:', error);
+			alert('Payment was successful, but there was an issue updating your records. Please contact support.');
+		}
 	}
 
 	async function handlePayNow() {

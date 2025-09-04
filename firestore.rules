@@ -30,9 +30,16 @@ service cloud.firestore {
         exists(/databases/$(database)/documents/memorials/$(memorialId)/familyMembers/$(request.auth.uid));
     }
     
+    // Check if user is an approved funeral director
+    function isApprovedFuneralDirector() {
+      return request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'FuneralDirector' &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.approved == true;
+    }
+    
     // Combined check for edit permissions
     function canEditMemorial(memorialId) {
-      return isAdmin() || isOwner(memorialId) || isFamilyMember(memorialId);
+      return isAdmin() || isOwner(memorialId) || isFamilyMember(memorialId) || isApprovedFuneralDirector();
     }
     
     // Check if only updating allowed photo fields
@@ -83,6 +90,24 @@ service cloud.firestore {
       
       // Delete: only owners and admins
       allow delete: if isAdmin() || isOwner(memorialId);
+      
+      // ============================================
+      // 📸 SLIDESHOW PHOTOS SUBCOLLECTION
+      // ============================================
+      
+      match /slideshow/{photoId} {
+        // Read: owners, admins, family members, and public if memorial is public
+        allow read: if isPublicMemorial() || canEditMemorial(memorialId);
+        
+        // Create: owners, admins, and family members can upload photos
+        allow create: if canEditMemorial(memorialId);
+        
+        // Update: owners, admins, and family members can update photo metadata
+        allow update: if canEditMemorial(memorialId);
+        
+        // Delete: owners, admins, and family members can delete photos
+        allow delete: if canEditMemorial(memorialId);
+      }
       
       // ============================================
       // 👨‍👩‍👧‍👦 FAMILY MEMBERS SUBCOLLECTION
@@ -139,14 +164,31 @@ service cloud.firestore {
     // ============================================
     
     match /livestreamConfigs/{configId} {
-      // Read: allow authenticated users to read their own configs
-      allow read: if isSignedIn();
+      // Read: allow authenticated users to read their own configs, and approved funeral directors to read all configs
+      allow read: if isSignedIn() && (
+        // Users can read their own configs
+        request.auth.uid == resource.data.creatorUid ||
+        // Approved funeral directors can read all configs for livestreaming purposes
+        isApprovedFuneralDirector() ||
+        // Admins can read all configs
+        isAdmin()
+      );
       
-      // Write: allow authenticated users to create/update livestream configs
-      allow create, update: if isSignedIn();
+      // Create: allow authenticated users to create livestream configs
+      allow create: if isSignedIn();
       
-      // Delete: allow authenticated users to delete their own configs
-      allow delete: if isSignedIn();
+      // Update: prevent updates if payment status is 'paid', except for payment status updates and livestream status
+      allow update: if isSignedIn() && (
+        // Allow payment status updates (for completing payments)
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['paymentStatus', 'paymentIntentId', 'paidAt', 'updatedAt']) ||
+        // Allow livestream status updates by approved funeral directors
+        (isApprovedFuneralDirector() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['isLive', 'streamStartTime', 'streamEndTime', 'viewerCount', 'updatedAt'])) ||
+        // Allow other updates only if not paid yet
+        resource.data.paymentStatus != 'paid'
+      );
+      
+      // Delete: allow authenticated users to delete their own configs (only if not paid)
+      allow delete: if isSignedIn() && resource.data.paymentStatus != 'paid';
     }
     
     // ============================================

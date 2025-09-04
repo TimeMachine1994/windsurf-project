@@ -87,6 +87,9 @@
 			<p class="text-center text-sm">
 				Don't have an account? <a href="/register" class="anchor">Create one here</a>
 			</p>
+			<p class="text-center text-sm">
+				Are you a funeral director? <a href="/funeral-director-registration" class="anchor">Register here</a>
+			</p>
 		</form>
 	</div>
 </div>

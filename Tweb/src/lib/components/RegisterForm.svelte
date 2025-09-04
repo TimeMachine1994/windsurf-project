@@ -140,6 +140,9 @@
 				<p class="text-center text-sm">
 					Already have an account? <a href="/login" class="anchor">Sign in here</a>
 				</p>
+				<p class="text-center text-sm">
+					Are you a funeral director? <a href="/funeral-director-registration" class="anchor">Register here</a>
+				</p>
 			</form>
 		{/if}
 	</div>

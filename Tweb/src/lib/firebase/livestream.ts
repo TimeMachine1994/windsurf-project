@@ -2,9 +2,10 @@ import { doc, setDoc, getDoc, updateDoc, serverTimestamp, Timestamp } from 'fire
 import { db } from './config';
 import type { CalculatorFormData, BookingItem, LivestreamConfig } from '$lib/types/livestream';
 
-export interface LivestreamConfigFirestore extends Omit<LivestreamConfig, 'createdAt' | 'updatedAt'> {
+export interface LivestreamConfigFirestore extends Omit<LivestreamConfig, 'createdAt' | 'updatedAt' | 'paidAt'> {
 	createdAt: Timestamp;
 	updatedAt: Timestamp;
+	paidAt?: Timestamp;
 }
 
 // Save livestream configuration to Firestore
@@ -13,7 +14,8 @@ export async function saveLivestreamConfig(
 	formData: CalculatorFormData,
 	bookingItems: BookingItem[],
 	total: number,
-	currentStep: 'tier' | 'details' | 'addons' | 'payment'
+	currentStep: 'tier' | 'details' | 'addons' | 'payment',
+	paymentData?: { paymentStatus: 'pending' | 'paid' | 'failed'; paymentIntentId?: string; paidAt?: Date }
 ): Promise<{ success: boolean; configId: string; error?: string }> {
 	try {
 		console.log('💾 Saving livestream config to Firestore:', { memorialId, currentStep, total });
@@ -26,7 +28,12 @@ export async function saveLivestreamConfig(
 			bookingItems,
 			total,
 			currentStep,
-			updatedAt: serverTimestamp() as Timestamp
+			updatedAt: serverTimestamp() as Timestamp,
+			...(paymentData && {
+				paymentStatus: paymentData.paymentStatus,
+				paymentIntentId: paymentData.paymentIntentId,
+				paidAt: paymentData.paidAt ? Timestamp.fromDate(paymentData.paidAt) : undefined
+			})
 		};
 
 		// Check if config already exists
@@ -79,7 +86,8 @@ export async function getLivestreamConfig(memorialId: string): Promise<Livestrea
 			...data,
 			id: configDoc.id,
 			createdAt: data.createdAt.toDate(),
-			updatedAt: data.updatedAt.toDate()
+			updatedAt: data.updatedAt.toDate(),
+			paidAt: data.paidAt?.toDate()
 		};
 
 		console.log('✅ Livestream config loaded successfully:', config);
@@ -117,5 +125,38 @@ export async function hasLivestreamConfig(memorialId: string): Promise<boolean> 
 	} catch (error) {
 		console.error('❌ Error checking livestream config existence:', error);
 		return false;
+	}
+}
+
+// Update payment status for a livestream config
+export async function updatePaymentStatus(
+	memorialId: string,
+	paymentIntentId: string,
+	status: 'paid' | 'failed'
+): Promise<{ success: boolean; error?: string }> {
+	try {
+		console.log('💳 Updating payment status:', { memorialId, paymentIntentId, status });
+		
+		const configRef = doc(db, 'livestreamConfigs', memorialId);
+		const updateData: Partial<LivestreamConfigFirestore> = {
+			paymentStatus: status,
+			paymentIntentId,
+			updatedAt: serverTimestamp() as Timestamp
+		};
+
+		if (status === 'paid') {
+			updateData.paidAt = serverTimestamp() as Timestamp;
+		}
+
+		await updateDoc(configRef, updateData);
+		console.log('✅ Payment status updated successfully');
+		
+		return { success: true };
+	} catch (error) {
+		console.error('❌ Error updating payment status:', error);
+		return {
+			success: false,
+			error: error instanceof Error ? error.message : 'Unknown error'
+		};
 	}
 }
