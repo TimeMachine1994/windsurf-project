@@ -1,0 +1,90 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e6]:
+        - link "🏠 TributeStream" [ref=e8] [cursor=pointer]:
+          - /url: /
+          - generic [ref=e9] [cursor=pointer]: 🏠
+          - generic [ref=e10] [cursor=pointer]: TributeStream
+        - navigation [ref=e11]:
+          - link "Home" [ref=e12] [cursor=pointer]:
+            - /url: /
+          - link "Search" [ref=e13] [cursor=pointer]:
+            - /url: /search
+          - link "About" [ref=e14] [cursor=pointer]:
+            - /url: /about
+        - button "🔑 Login" [ref=e16]:
+          - generic [ref=e17]: 🔑
+          - generic [ref=e18]: Login
+    - main [ref=e19]:
+      - generic [ref=e20]:
+        - generic [ref=e21]:
+          - heading "Search Memorials" [level=1] [ref=e22]
+          - paragraph [ref=e23]: Find memorials by name, biography, or other details
+        - generic [ref=e25]:
+          - textbox "Search for a memorial..." [ref=e26]
+          - button "🔍 Search" [ref=e27]:
+            - generic [ref=e28]: 🔍
+            - generic [ref=e29]: Search
+        - generic [ref=e30]:
+          - generic [ref=e31]: 🔍
+          - heading "Start Your Search" [level=2] [ref=e32]
+          - paragraph [ref=e33]: Enter a name or keyword to search through public memorials.
+    - contentinfo [ref=e34]:
+      - generic [ref=e35]:
+        - generic [ref=e36]:
+          - generic [ref=e37]:
+            - heading "TributeStream" [level=3] [ref=e38]
+            - paragraph [ref=e39]: Honor lives and share memories with beautiful digital memorials.
+          - generic [ref=e40]:
+            - heading "Quick Links" [level=4] [ref=e41]
+            - list [ref=e42]:
+              - listitem [ref=e43]:
+                - link "Home" [ref=e44] [cursor=pointer]:
+                  - /url: /
+              - listitem [ref=e45]:
+                - link "Browse Memorials" [ref=e46] [cursor=pointer]:
+                  - /url: /memorials
+              - listitem [ref=e47]:
+                - link "Create Memorial" [ref=e48] [cursor=pointer]:
+                  - /url: /create-memorial
+              - listitem [ref=e49]:
+                - link "About" [ref=e50] [cursor=pointer]:
+                  - /url: /about
+          - generic [ref=e51]:
+            - heading "Support" [level=4] [ref=e52]
+            - list [ref=e53]:
+              - listitem [ref=e54]:
+                - link "Help Center" [ref=e55] [cursor=pointer]:
+                  - /url: /help
+              - listitem [ref=e56]:
+                - link "Contact Us" [ref=e57] [cursor=pointer]:
+                  - /url: /contact
+              - listitem [ref=e58]:
+                - link "Privacy Policy" [ref=e59] [cursor=pointer]:
+                  - /url: /privacy
+              - listitem [ref=e60]:
+                - link "Terms of Service" [ref=e61] [cursor=pointer]:
+                  - /url: /terms
+        - generic [ref=e62]: © 2025 TributeStream. All rights reserved.
+  - generic [ref=e66]:
+    - generic [ref=e67]:
+      - generic [ref=e68]: "[plugin:vite-plugin-svelte:compile]"
+      - generic [ref=e69]: src/routes/+error.svelte:62:8 Event attribute must be a JavaScript expression, not a string https://svelte.dev/e/attribute_invalid_event_handler
+    - generic [ref=e70]: +error.svelte:62:8
+    - generic [ref=e71]: 60 | 61 | <button 62 | onclick="history.back()" ^ 63 | class="block w-full px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors" 64 | >
+    - generic [ref=e72]:
+      - text: Click outside, press
+      - generic [ref=e73]: Esc
+      - text: key, or fix the code to dismiss.
+      - text: You can also disable this overlay by setting
+      - code [ref=e74]: server.hmr.overlay
+      - text: to
+      - code [ref=e75]: "false"
+      - text: in
+      - code [ref=e76]: vite.config.ts
+      - text: .
+```

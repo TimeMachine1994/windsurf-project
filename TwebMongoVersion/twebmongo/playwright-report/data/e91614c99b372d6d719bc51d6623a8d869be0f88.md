@@ -1,0 +1,85 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e6]:
+      - link "🏠 TributeStream" [ref=e8] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e9] [cursor=pointer]: 🏠
+        - generic [ref=e10] [cursor=pointer]: TributeStream
+      - navigation [ref=e11]:
+        - link "Home" [ref=e12] [cursor=pointer]:
+          - /url: /
+        - link "Search" [ref=e13] [cursor=pointer]:
+          - /url: /search
+        - link "About" [ref=e14] [cursor=pointer]:
+          - /url: /about
+      - button "🔑 Login" [ref=e16]:
+        - generic [ref=e17]: 🔑
+        - generic [ref=e18]: Login
+  - main [ref=e19]:
+    - generic [ref=e21]:
+      - generic [ref=e22]:
+        - heading "Honor Their Memory" [level=1] [ref=e23]
+        - paragraph [ref=e24]: Create beautiful, lasting memorials for your loved ones. Share memories, photos, and celebrate the lives that touched our hearts.
+        - generic [ref=e25]:
+          - button "Get Started" [ref=e26]
+          - link "Browse Memorials" [ref=e27] [cursor=pointer]:
+            - /url: /search
+      - generic [ref=e28]:
+        - generic [ref=e29]:
+          - img [ref=e31]
+          - heading "Beautiful Memorials" [level=3] [ref=e33]
+          - paragraph [ref=e34]: Create stunning tribute pages with photos, stories, and memories that celebrate their life.
+        - generic [ref=e35]:
+          - img [ref=e37]
+          - heading "Easy Sharing" [level=3] [ref=e39]
+          - paragraph [ref=e40]: Share memorial pages with family and friends through social media or direct links.
+        - generic [ref=e41]:
+          - img [ref=e43]
+          - heading "Private & Secure" [level=3] [ref=e45]
+          - paragraph [ref=e46]: Control who can view and contribute to memorial pages with flexible privacy settings.
+      - generic [ref=e47]:
+        - heading "Recent Memorials" [level=2] [ref=e48]
+        - paragraph [ref=e49]: Discover and honor the memories shared by our community
+        - link "Browse All Memorials →" [ref=e50] [cursor=pointer]:
+          - /url: /search
+  - contentinfo [ref=e51]:
+    - generic [ref=e52]:
+      - generic [ref=e53]:
+        - generic [ref=e54]:
+          - heading "TributeStream" [level=3] [ref=e55]
+          - paragraph [ref=e56]: Honor lives and share memories with beautiful digital memorials.
+        - generic [ref=e57]:
+          - heading "Quick Links" [level=4] [ref=e58]
+          - list [ref=e59]:
+            - listitem [ref=e60]:
+              - link "Home" [ref=e61] [cursor=pointer]:
+                - /url: /
+            - listitem [ref=e62]:
+              - link "Browse Memorials" [ref=e63] [cursor=pointer]:
+                - /url: /memorials
+            - listitem [ref=e64]:
+              - link "Create Memorial" [ref=e65] [cursor=pointer]:
+                - /url: /create-memorial
+            - listitem [ref=e66]:
+              - link "About" [ref=e67] [cursor=pointer]:
+                - /url: /about
+        - generic [ref=e68]:
+          - heading "Support" [level=4] [ref=e69]
+          - list [ref=e70]:
+            - listitem [ref=e71]:
+              - link "Help Center" [ref=e72] [cursor=pointer]:
+                - /url: /help
+            - listitem [ref=e73]:
+              - link "Contact Us" [ref=e74] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e75]:
+              - link "Privacy Policy" [ref=e76] [cursor=pointer]:
+                - /url: /privacy
+            - listitem [ref=e77]:
+              - link "Terms of Service" [ref=e78] [cursor=pointer]:
+                - /url: /terms
+      - generic [ref=e79]: © 2025 TributeStream. All rights reserved.
+```

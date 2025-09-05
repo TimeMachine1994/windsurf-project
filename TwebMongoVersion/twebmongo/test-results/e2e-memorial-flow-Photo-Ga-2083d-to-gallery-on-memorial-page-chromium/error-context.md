@@ -1,0 +1,59 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e6]:
+      - link "🏠 TributeStream" [ref=e8] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e9] [cursor=pointer]: 🏠
+        - generic [ref=e10] [cursor=pointer]: TributeStream
+      - navigation [ref=e11]:
+        - link "Home" [ref=e12] [cursor=pointer]:
+          - /url: /
+        - link "Search" [ref=e13] [cursor=pointer]:
+          - /url: /search
+        - link "About" [ref=e14] [cursor=pointer]:
+          - /url: /about
+      - button "🔑 Login" [ref=e16]:
+        - generic [ref=e17]: 🔑
+        - generic [ref=e18]: Login
+  - main [ref=e19]
+  - contentinfo [ref=e22]:
+    - generic [ref=e23]:
+      - generic [ref=e24]:
+        - generic [ref=e25]:
+          - heading "TributeStream" [level=3] [ref=e26]
+          - paragraph [ref=e27]: Honor lives and share memories with beautiful digital memorials.
+        - generic [ref=e28]:
+          - heading "Quick Links" [level=4] [ref=e29]
+          - list [ref=e30]:
+            - listitem [ref=e31]:
+              - link "Home" [ref=e32] [cursor=pointer]:
+                - /url: /
+            - listitem [ref=e33]:
+              - link "Browse Memorials" [ref=e34] [cursor=pointer]:
+                - /url: /memorials
+            - listitem [ref=e35]:
+              - link "Create Memorial" [ref=e36] [cursor=pointer]:
+                - /url: /create-memorial
+            - listitem [ref=e37]:
+              - link "About" [ref=e38] [cursor=pointer]:
+                - /url: /about
+        - generic [ref=e39]:
+          - heading "Support" [level=4] [ref=e40]
+          - list [ref=e41]:
+            - listitem [ref=e42]:
+              - link "Help Center" [ref=e43] [cursor=pointer]:
+                - /url: /help
+            - listitem [ref=e44]:
+              - link "Contact Us" [ref=e45] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e46]:
+              - link "Privacy Policy" [ref=e47] [cursor=pointer]:
+                - /url: /privacy
+            - listitem [ref=e48]:
+              - link "Terms of Service" [ref=e49] [cursor=pointer]:
+                - /url: /terms
+      - generic [ref=e50]: © 2025 TributeStream. All rights reserved.
+```
