@@ -1,0 +1,12 @@
+{
+  "functions": {
+    "src/routes/api/**/*.ts": {
+      "runtime": "nodejs18.x"
+    }
+  },
+  "env": {
+    "MONGODB_URI": "@mongodb_uri",
+    "SENDGRID_API_KEY": "@sendgrid_api_key",
+    "SENDGRID_FROM_EMAIL": "@sendgrid_from_email"
+  }
+}

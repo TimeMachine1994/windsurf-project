@@ -1,5 +1,5 @@
 import { MongoClient, type Db } from 'mongodb';
-import { MONGODB_URI } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 
 let client: MongoClient | null = null;
 let db: Db | null = null;
@@ -7,6 +7,7 @@ let db: Db | null = null;
 export async function getDb(): Promise<Db> {
 	if (db) return db;
 
+	const MONGODB_URI = env.MONGODB_URI;
 	console.log('MONGODB_URI exists:', !!MONGODB_URI);
 	console.log('MONGODB_URI length:', MONGODB_URI?.length || 0);
 

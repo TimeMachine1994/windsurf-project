@@ -56,6 +56,7 @@
 		"@aws-sdk/s3-request-presigner": "^3.882.0",
 		"@sendgrid/mail": "^8.1.5",
 		"@stripe/stripe-js": "^7.9.0",
+		"@sveltejs/adapter-vercel": "^5.10.2",
 		"@tailwindcss/postcss": "^4.1.13",
 		"autoprefixer": "^10.4.21",
 		"bcryptjs": "^3.0.2",
