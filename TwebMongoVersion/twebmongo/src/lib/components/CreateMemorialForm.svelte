@@ -21,7 +21,7 @@
 	}
 
 	// Generate preview URL
-	$: previewUrl = lovedOneName ? lovedOneName.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '') : '';
+	$: previewUrl = lovedOneName ? `celebration-of-life-for-${lovedOneName.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '')}` : '';
 
 	async function handleSubmit() {
 		error = '';
@@ -71,7 +71,7 @@
 			
 			// Redirect to memorial page after 3 seconds
 			setTimeout(() => {
-				goto(`/memorial/${result.customUrl}`);
+				goto(`/${result.customUrl}`);
 			}, 3000);
 			
 		} catch (err: any) {
@@ -314,7 +314,7 @@ We apologize for the inconvenience.`;
 				<h2 class="text-2xl font-bold mb-8">Memorial Created Successfully!</h2>
 				<div class="space-y-4 mb-8">
 					<p><strong>Memorial for:</strong> {lovedOneName}</p>
-					<p><strong>Your URL:</strong> <code class="bg-gray-100 px-2 py-1 rounded">tributestream.com/memorial/{generatedUrl}</code></p>
+					<p><strong>Your URL:</strong> <code class="bg-gray-100 px-2 py-1 rounded">tributestream.com/{generatedUrl}</code></p>
 					<p><strong>Login credentials sent to:</strong> {creatorEmail}</p>
 					{#if generatedPassword}
 						<p><strong>Your password:</strong> <code class="bg-gray-100 px-2 py-1 rounded">{generatedPassword}</code></p>

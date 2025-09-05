@@ -33,12 +33,13 @@
 			</div>
 
 			<!-- Nav -->
-			<nav class="hidden md:flex gap-6 text-sm text-gray-600">
-				<a href="/" class="hover:text-gray-900">Home</a>
+			<nav class="hidden md:flex gap-6 text-sm text-gray-600 items-center">
+				<a href="/create-memorial" class="hover:text-gray-900">Create Memorial</a>
 				<a href="/for-families" class="hover:text-gray-900">For Families</a>
 				<a href="/for-funeral-homes" class="hover:text-gray-900">For Funeral Homes</a>
-				<a href="/packages" class="hover:text-gray-900">Packages</a>
-				<a href="/contact" class="hover:text-gray-900">Contact</a>
+				<a href="/calculator" class="px-3 py-2 rounded-lg bg-green-600 text-white text-sm hover:bg-green-700 transition-colors">
+					Price Calculator
+				</a>
 			</nav>
 
 			<!-- Auth -->

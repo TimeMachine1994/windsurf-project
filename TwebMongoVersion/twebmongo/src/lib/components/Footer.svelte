@@ -8,14 +8,17 @@
       <div>
         <h3 class="text-white font-semibold mb-3">TributeStream</h3>
         <p class="text-sm text-gray-400">Honor lives and share memories with beautiful digital memorials.</p>
+        <ul class="space-y-2 text-sm mt-4">
+          <li><a href="/funeral-director-form" class="hover:text-white">Funeral Director Form</a></li>
+        </ul>
       </div>
       <div>
         <h4 class="text-white font-semibold mb-3">Quick Links</h4>
         <ul class="space-y-2 text-sm">
           <li><a href="/" class="hover:text-white">Home</a></li>
-          <li><a href="/memorials" class="hover:text-white">Browse Memorials</a></li>
           <li><a href="/create-memorial" class="hover:text-white">Create Memorial</a></li>
-          <li><a href="/about" class="hover:text-white">About</a></li>
+          <li><a href="/for-families" class="hover:text-white">For Families</a></li>
+          <li><a href="/for-funeral-homes" class="hover:text-white">For Funeral Homes</a></li>
         </ul>
       </div>
       <div>

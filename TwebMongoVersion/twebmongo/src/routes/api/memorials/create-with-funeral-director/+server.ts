@@ -31,17 +31,33 @@ export const POST: RequestHandler = async ({ request }) => {
 			creatorEmail,
 			dateOfBirth,
 			dateOfPassing,
-			biography
+			biography,
+			serviceDate,
+			serviceStartTime,
+			serviceEndTime,
+			serviceDays,
+			funeralDirectorId
 		} = body;
 
 		// Validation
-		if (!lovedOneName || !creatorName || !creatorPhone || !creatorEmail) {
+		if (!lovedOneName || !creatorName || !creatorPhone || !creatorEmail || !funeralDirectorId) {
 			return json({ error: 'Missing required fields' }, { status: 400 });
 		}
 
 		const db = await getDb();
 		
-		// Check if user already exists
+		// Verify funeral director exists and is approved
+		const funeralDirector = await db.collection('users').findOne({ 
+			_id: funeralDirectorId,
+			role: 'FuneralDirector',
+			approved: true
+		});
+
+		if (!funeralDirector) {
+			return json({ error: 'Invalid or unapproved funeral director' }, { status: 403 });
+		}
+
+		// Check if family user already exists
 		const existingUser = await db.collection('users').findOne({ email: creatorEmail });
 		if (existingUser) {
 			return json({ error: 'An account with this email already exists' }, { status: 409 });
@@ -63,11 +79,11 @@ export const POST: RequestHandler = async ({ request }) => {
 			urlCounter++;
 		}
 
-		// Generate password for owner account
+		// Generate password for family owner account
 		const generatedPassword = generatePassword();
 		const hashedPassword = await bcrypt.hash(generatedPassword, 12);
 
-		// Create owner user account
+		// Create family owner user account
 		const userDoc = {
 			email: creatorEmail,
 			password: hashedPassword,
@@ -78,12 +94,15 @@ export const POST: RequestHandler = async ({ request }) => {
 			approved: true,
 			emailVerified: false,
 			createdAt: new Date(),
-			updatedAt: new Date()
+			updatedAt: new Date(),
+			// Link to funeral director who created this
+			createdByFuneralDirector: funeralDirectorId,
+			funeralHomeName: funeralDirector.funeralHomeName
 		};
 
 		const userResult = await db.collection('users').insertOne(userDoc);
 
-		// Create memorial
+		// Create memorial with enhanced funeral director fields
 		const memorialDoc = {
 			customUrl,
 			lovedOneName,
@@ -97,12 +116,23 @@ export const POST: RequestHandler = async ({ request }) => {
 			photoCount: 0,
 			viewCount: 0,
 			createdAt: new Date(),
-			updatedAt: new Date()
+			updatedAt: new Date(),
+			// Funeral director specific fields
+			funeralDirectorId,
+			funeralHomeName: funeralDirector.funeralHomeName,
+			funeralDirectorName: funeralDirector.displayName || funeralDirector.name,
+			// Service information
+			serviceDate: serviceDate ? new Date(serviceDate) : null,
+			serviceStartTime: serviceStartTime || null,
+			serviceEndTime: serviceEndTime || null,
+			serviceDays: serviceDays || 1,
+			// Professional service flag
+			isProfessionalService: true
 		};
 
 		const memorialResult = await db.collection('memorials').insertOne(memorialDoc);
 
-		// Send welcome email with credentials
+		// Send welcome email with credentials to family
 		try {
 			const emailResponse = await fetch('/api/email/send-credentials', {
 				method: 'POST',
@@ -114,7 +144,9 @@ export const POST: RequestHandler = async ({ request }) => {
 					name: creatorName,
 					password: generatedPassword,
 					memorialUrl: customUrl,
-					lovedOneName
+					lovedOneName,
+					funeralHomeName: funeralDirector.funeralHomeName,
+					funeralDirectorName: funeralDirector.displayName || funeralDirector.name
 				})
 			});
 
@@ -138,11 +170,15 @@ export const POST: RequestHandler = async ({ request }) => {
 				...userDoc,
 				_id: userResult.insertedId,
 				password: undefined // Don't return password in response
+			},
+			funeralDirector: {
+				name: funeralDirector.displayName || funeralDirector.name,
+				funeralHomeName: funeralDirector.funeralHomeName
 			}
 		});
 
 	} catch (error) {
-		console.error('Memorial creation error:', error);
+		console.error('Funeral director memorial creation error:', error);
 		return json({ error: 'Internal server error' }, { status: 500 });
 	}
 };
