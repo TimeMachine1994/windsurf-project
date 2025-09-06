@@ -11,12 +11,12 @@
 
 	let { children } = $props();
 
-  onMount(() => {
+  onMount(async () => {
     console.log('🏗️ LAYOUT: onMount called, browser =', browser);
     // Initialize Auth0 client on app load
     if (browser) {
       console.log('🏗️ LAYOUT: Initializing auth service...');
-      authService.initialize();
+      await authService.initialize();
       console.log('🏗️ LAYOUT: Auth service initialized');
     }
   });
